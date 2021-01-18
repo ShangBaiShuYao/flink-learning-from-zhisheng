@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.shangbaishuyao.flink</groupId>
+    <artifactId>flink-learning-from-zhisheng</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>flink-learning-from-zhisheng-common</module>
+        <module>flink-learning-from-zhisheng-core</module>
+        <module>flink-learning-from-zhisheng-sinks</module>
+        <module>flink-learning-from-zhisheng-source</module>
+    </modules>
+
+    <properties>
+        <compiler.version>1.8</compiler.version>
+        <flink.version>1.10.0</flink.version>
+        <java.version>1.8</java.version>
+        <hive.version>1.2.1</hive.version>
+        <scala.binary.version>2.11</scala.binary.version>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
+    <dependencies>
+        <!--Flink提供了一个Apache Kafka连接器，我们可以很方便的实现从Kafka主题读取数据和向其写入数据。-->
+        <!--https://www.jianshu.com/p/1a3db658f5da-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka-0.11_${scala.binary.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <!-- flink-java 和 flink-streaming-java 是我们 Flink 必备的核心依赖-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+            <version>${flink.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--加入下面两个依赖才会出现 Flink 的日志出来-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+    </dependencies>
+
+    <!-- This profile helps to make things run out of the box in IntelliJ -->
+    <!-- Its adds Flink's core classes to the runtime class path. -->
+    <!-- Otherwise they are missing in IntelliJ, because the dependency is 'provided' -->
+    <!--有道翻译-->
+    <!--这个配置文件有助于使事情运行在IntelliJ的盒子之外-->
+    <!--它将Flink的核心类添加到运行时类路径。-->
+    <!--否则在IntelliJ中会丢失它们，因为依赖被“提供”了-->
+    <profiles>
+        <profile>
+            <id>add-dependencies-for-IDEA</id>
+            <activation>
+                <property>
+                    <name>idea.version</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.flink</groupId>
+                    <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+                    <version>${flink.version}</version>
+                    <scope>compile</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+</project>
