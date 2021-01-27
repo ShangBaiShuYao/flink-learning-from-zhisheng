@@ -69,7 +69,7 @@ public class MySink extends RichSinkFunction<String> {
 
     //构造方法
     public MySink(String tx) {
-        System.out.println("=========我也不知道这个tx代表啥,想知道问zhisheng去========" + tx);
+        System.out.println("=======================" + tx);
         this.tx = tx;
     }
 

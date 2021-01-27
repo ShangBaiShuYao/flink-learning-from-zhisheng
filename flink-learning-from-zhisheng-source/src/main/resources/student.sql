@@ -9,5 +9,5 @@ CREATE TABLE `student` (
 
 
 
-INSERT INTO `student` VALUES ('1', 'zhisheng01', '123456', '18'), ('2', 'zhisheng02', '123', '17'), ('3', 'zhisheng03', '1234', '18'), ('4', 'zhisheng04', '12345', '16');
+INSERT INTO `student` VALUES ('1', 'shangbaishuyao01', '123456', '18'), ('2', 'shangbaishuyao02', '123', '17'), ('3', 'shangbaishuyao03', '1234', '18'), ('4', 'shangbaishuyao04', '12345', '16');
 COMMIT;
