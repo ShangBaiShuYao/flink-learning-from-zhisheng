@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Desc: 学生对象实体类<br/>
- * create by shangbaishuyao 2020-12-11
+ * create by shangbaishuyao on 2020-12-11
  *@Author: 上白书妖
  *@Date: 2020/12/11 13:55
  */

@@ -14,6 +14,8 @@
         <module>flink-learning-from-zhisheng-core</module>
         <module>flink-learning-from-zhisheng-sinks</module>
         <module>flink-learning-from-zhisheng-source</module>
+        <module>flink-learning-from-zhisheng-configration-center</module>
+        <module>flink-learning-from-zhisheng-connectors</module>
     </modules>
 
     <properties>

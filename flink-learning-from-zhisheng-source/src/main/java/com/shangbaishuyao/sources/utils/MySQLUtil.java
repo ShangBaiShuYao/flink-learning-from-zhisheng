@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 
 /**
  * Desc:MySQL工具类<br/>
- * create by shangbaishuyao 2020-12-11
+ * create by shangbaishuyao on 2020-12-11
  *@Author: 上白书妖
  *@Date: 2020/12/11 14:01
  */

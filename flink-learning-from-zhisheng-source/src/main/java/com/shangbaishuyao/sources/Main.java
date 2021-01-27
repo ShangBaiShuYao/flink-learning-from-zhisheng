@@ -9,7 +9,7 @@ import java.util.Properties;
 
 /**
  * Desc: 利用kafka 自带的 source 读取 kafka 里面的数据 <br/>
- * create by shangbaishuyao 2020-12-11
+ * create by shangbaishuyao on 2020-12-11
  *@Author: 上白书妖
  *@Date: 2020/12/11 15:14
  */

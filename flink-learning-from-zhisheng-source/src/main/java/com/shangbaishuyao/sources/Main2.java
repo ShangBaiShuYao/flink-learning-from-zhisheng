@@ -5,7 +5,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
  * Desc:自定义source 从mysql中读取数据<br/>
- * create by shangbaishuyao 2020-12-11
+ * create by shangbaishuyao on 2020-12-11
  *@Author: 上白书妖
  *@Date: 2020/12/11 16:10
  */
