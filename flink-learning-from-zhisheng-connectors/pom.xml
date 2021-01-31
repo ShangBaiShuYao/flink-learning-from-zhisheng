@@ -19,6 +19,7 @@
         <module>flink-learning-connectors-hdfs</module>
         <module>flink-learning-connectors-flume</module>
         <module>flink-learning-connectors-mysql</module>
+        <module>flink-learning-connectors-redis</module>
     </modules>
 
     <dependencies>

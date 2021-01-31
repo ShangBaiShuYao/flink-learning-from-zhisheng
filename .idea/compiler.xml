@@ -7,19 +7,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="flink-learning-from-zhisheng-source" />
-        <module name="flink-learning-connectors-cassandra" />
-        <module name="flink-learning-from-zhisheng-sinks" />
-        <module name="flink-learning-connectors-mysql" />
-        <module name="flink-learning-from-zhisheng-common" />
-        <module name="flink-learning-connectors-activemq" />
-        <module name="flink-learning-connectors-akka" />
         <module name="flink-learning-from-zhisheng-core" />
+        <module name="flink-learning-connectors-hdfs" />
         <module name="flink-learning-connectors-flume" />
-        <module name="flink-learning-configration-center-apollo" />
+        <module name="flink-learning-from-zhisheng-source" />
+        <module name="flink-learning-connectors-mysql" />
+        <module name="flink-learning-connectors-akka" />
+        <module name="flink-learning-from-zhisheng-sinks" />
+        <module name="flink-learning-connectors-redis" />
         <module name="flink-learning-connectors-rocketmq" />
         <module name="flink-learning-configration-center-nacos" />
-        <module name="flink-learning-connectors-hdfs" />
+        <module name="flink-learning-connectors-activemq" />
+        <module name="flink-learning-connectors-cassandra" />
+        <module name="flink-learning-configration-center-apollo" />
+        <module name="flink-learning-from-zhisheng-common" />
       </profile>
     </annotationProcessing>
   </component>
