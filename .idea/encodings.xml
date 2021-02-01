@@ -12,6 +12,8 @@
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-akka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-cassandra/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-cassandra/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-es/flink-learning-connectors-es6/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-es/flink-learning-connectors-es6/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-flume/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-flume/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-hdfs/src/main/java" charset="UTF-8" />

@@ -20,6 +20,7 @@
         <module name="flink-learning-configration-center-nacos" />
         <module name="flink-learning-connectors-rabbitmq" />
         <module name="flink-learning-connectors-cassandra" />
+        <module name="flink-learning-connectors-es6" />
         <module name="flink-learning-configration-center-apollo" />
         <module name="flink-learning-from-zhisheng-common" />
       </profile>
