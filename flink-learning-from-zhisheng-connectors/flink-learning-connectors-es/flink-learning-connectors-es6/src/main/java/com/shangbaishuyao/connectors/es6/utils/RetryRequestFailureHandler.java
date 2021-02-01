@@ -47,6 +47,7 @@ import java.util.Optional;
  */
 @Slf4j
 public class RetryRequestFailureHandler implements ActionRequestFailureHandler {
+    public RetryRequestFailureHandler() {}
     @Override
     public void onFailure(ActionRequest actionRequest, Throwable throwable, int restStatusCode, RequestIndexer requestIndexer) throws Throwable {
         if (ExceptionUtils.findThrowable(throwable, EsRejectedExecutionException.class).isPresent()) {
