@@ -20,6 +20,8 @@
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-flume/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-hdfs/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-hdfs/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-kafka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-kafka/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-mysql/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-mysql/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-rabbitmq/src/main/java" charset="UTF-8" />
@@ -34,5 +36,9 @@
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sinks/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-source/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-source/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sql/flink-learning-sql-ago/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sql/flink-learning-sql-ago/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sql/flink-learning-sql-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sql/flink-learning-sql-common/src/main/resources" charset="UTF-8" />
   </component>
 </project>

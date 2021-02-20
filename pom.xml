@@ -16,6 +16,7 @@
         <module>flink-learning-from-zhisheng-source</module>
         <module>flink-learning-from-zhisheng-configration-center</module>
         <module>flink-learning-from-zhisheng-connectors</module>
+        <module>flink-learning-from-zhisheng-sql</module>
     </modules>
 
     <properties>

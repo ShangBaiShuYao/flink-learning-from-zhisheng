@@ -22,6 +22,7 @@
         <module>flink-learning-connectors-redis</module>
         <module>flink-learning-connectors-rabbitmq</module>
         <module>flink-learning-connectors-es</module>
+        <module>flink-learning-connectors-kafka</module>
     </modules>
 
     <dependencies>
