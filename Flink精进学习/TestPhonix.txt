@@ -1,0 +1,138 @@
+package com.hl.test
+
+import org.apache.flink.streaming.api.{CheckpointingMode, TimeCharacteristic}
+import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
+import org.apache.hadoop.hbase.client.BufferedMutator
+import org.apache.flink.api.common.typeinfo.BasicTypeInfo
+import org.apache.flink.api.java.io.TextInputFormat
+import org.apache.flink.core.fs.Path
+import org.apache.flink.streaming.api.datastream.DataStreamSink
+import org.apache.flink.streaming.api.functions.source.FileProcessingMode
+import org.apache.flink.streaming.api.scala._
+import org.apache.flink.api.common.io.OutputFormat
+import org.apache.flink.configuration.Configuration
+import org.apache.hadoop.hbase.{HBaseConfiguration, HConstants, TableName}
+import org.apache.hadoop.hbase.client._
+import org.apache.hadoop.hbase.util.Bytes
+
+/**
+ * 日志如下
+ * 121.164.164.145	2020-03-05 08:49:35	"GET /article/117.html HTTP/1.1 "	https://cn.bing.com/search?q=消费金融	404
+ * 设计一个样例类来保存数据
+ */
+//case class TestPhoenix(ip:String,newtime:String,url:String,referer:String,code:String)
+
+object TestPhoenix {
+  def main(args: Array[String]): Unit = {
+    val env = StreamExecutionEnvironment.getExecutionEnvironment
+    env.enableCheckpointing(5000)
+    env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
+//    // 设置env的处理时间为EventTime
+    env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime)
+    //  设置并行度
+    env.setParallelism(1)
+    //从文件中读取数据
+
+    val path = new Path("D:\\logs.txt")
+    val format   = new TextInputFormat(path)
+    val typeInfo : BasicTypeInfo[String] = BasicTypeInfo.STRING_TYPE_INFO
+    format.setCharsetName("UTF-8")
+    val logDataStream: DataStream[String] = env.readFile(format , "D:\\logs.txt", FileProcessingMode.PROCESS_CONTINUOUSLY, 1L)
+//     logDataStream.print()
+//    val logDataStream: DataStream[String] = env.socketTextStream("192.168.157.130", 9999)
+    //落地到HBASE
+    val value: DataStreamSink[String] = logDataStream.writeUsingOutputFormat(new HBaseOutputFormat)
+    value
+      .name("hbase-sink")
+    env.execute("TestPhoenix")
+  }
+
+  /**
+   * Flink批量编写hbase
+   * 写入hbase提供两种方式
+   * 批量写入效率较高 实现outputformat
+   */
+  class HBaseOutputFormat extends OutputFormat[String] with Serializable {
+    val zkServer = "192.168.157.129"
+    val port = "2181"
+    var conn: Connection = null
+    var mutator: BufferedMutator = null
+    var count = 0
+    /**
+     * 配置输出格式 此方法总是在实例化输出格式上首先调用的
+     * @param parameters
+     */
+    override def configure(parameters: Configuration): Unit = {
+
+    }
+    /**
+     * 用于打开输出格式的并行实例，所以在open方法中我们会进行hbase的连接，配置，建表等操作。
+     * 注意：由于flink是一条一条的处理数据，所以我们在插入hbase的时候不能来一条flush下，
+     * 不然会给hbase造成很大的压力，而且会产生很多线程导致集群崩溃，所以线上任务必须控制flush的频率。
+     * 解决方案：我们可以在open方法中定义一个变量，然后在写入hbase时比如500条flush一次，或者加入一个list，判断list的大小满足某个阀值flush一下
+     *
+     * @param taskNumber
+     * @param numTasks
+     */
+    override def open(taskNumber: Int, numTasks: Int): Unit = {
+      val config: org.apache.hadoop.conf.Configuration = HBaseConfiguration.create
+      config.set(HConstants.ZOOKEEPER_QUORUM, zkServer)
+      config.set(HConstants.ZOOKEEPER_CLIENT_PORT, port)
+      config.setInt(HConstants.HBASE_CLIENT_OPERATION_TIMEOUT, 30000)
+      config.setInt(HConstants.HBASE_CLIENT_SCANNER_TIMEOUT_PERIOD, 30000)
+      //获取连接
+      conn = ConnectionFactory.createConnection(config)
+      print(conn)
+      val admin: Admin = conn.getAdmin
+//      // 获取TableName
+      val tableName: TableName = TableName.valueOf("testphoenix")
+      print(tableName)
+      if (!admin.tableExists(tableName)) {
+        // 构建出 表的描述的建造者
+        val descBuilder: TableDescriptorBuilder = TableDescriptorBuilder.newBuilder(tableName)
+        // 创建表
+        admin.createTable(descBuilder.build())
+      }
+      conn.getTable(tableName)
+      val params: BufferedMutatorParams = new BufferedMutatorParams(tableName)
+      //      //设置缓存1m，当达到1m时数据会自动刷到hbase
+      params.writeBufferSize(1024*1024) //设置缓存的大小
+      mutator = conn.getBufferedMutator(params)
+//      print(mutator)
+      count = 0
+    }
+
+    /**
+     * 将数据写入数据源 所以我们会在这个方法中调用写入hbase的API
+     * @param record
+     */
+    override def writeRecord(record: String): Unit = {
+      val cf1 = "phoenix"
+      val array: Array[String] = record.split("\t")
+      val put: Put = new Put(Bytes.toBytes(array(0)))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("newtime"), Bytes.toBytes(array(1)))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("url"), Bytes.toBytes(array(2)))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("referer"), Bytes.toBytes(array(3)))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("code"), Bytes.toBytes(array(4)))
+      mutator.mutate(put)
+//      print(put)
+      //      每4条刷新一下数据，如果是批处理调用outputFormat，这里填写的4必须不能大于批处理的记录总数量，否则数据不会更新到hbase里面
+      if (count >= 500){
+        mutator.flush()
+        count = 0
+      }
+      count = count + 1
+    }
+    /**
+     * 关闭
+     */
+    override def close(): Unit = {
+      try {
+        if (conn != null)
+         conn.close()
+      } catch {
+        case e: Exception => println(e.getMessage)
+      }
+    }
+  }
+}

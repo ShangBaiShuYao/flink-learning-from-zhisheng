@@ -1,0 +1,240 @@
+object DataRele {
+
+  def main(args: Array[String]): Unit = {
+
+    /*
+     * 获取数据源
+     */
+    //dataA-消费pulsar数据
+    val s1mmePulsarConsumer = new FlinkPulsarSource(dataAAdminUrl,
+                                                       pulsarClientConf,
+                                                       new SimpleStringSchema(),
+                                                       dataAPulsarProp)
+                                    .setStartFromLatest()
+    //dataA source
+    val dataAPulsarSource = env.addSource(dataAPulsarConsumer)
+      .filter(_.trim.nonEmpty)
+      .assignTimestampsAndWatermarks(new timestampExtractor(8))
+      .name("dataAsource")
+
+    //dataB-消费kafka数据
+    val dataBDstreamConsumer = new FlinkKafkaConsumer010[String](
+                                                               dataBKafkaTopicName,
+                                                               new SimpleStringSchema(),
+                                                               dataBKafkaProp)
+                                     .setStartFromLatest()
+    //dataB source
+    val s1uKafkaSource: DataStream[String] =env.addSource(dataBDstreamConsumer)
+                                                .filter(_.trim.nonEmpty)
+                                                .assignTimestampsAndWatermarks(new timestampExtractor(1))
+                                                .name("dataBsource")
+
+
+
+    //dataA 字段处理
+    val dataAMapDstream =
+      dataAPulsarSource.map(new RichMapFunction[String,
+        (String, String, String, String, String)]{
+        //通过与比较当前时间和事间时间实现监测数据延迟情况
+        //flink自带值类
+        //@transient
+        private var delayTime = new LongValue()
+        override def open(params: Configuration) {
+          getRuntimeContext().getMetricGroup()
+            .gauge[Long, ScalaGauge[Long]](
+            "delay_dataA", ScalaGauge[Long]( () => delayTime.getValue ) )
+        }
+        override def map(line: String) = {
+          delayTime.setValue(competeTime(line.split(pre_flag)(8)))
+          val arr = line.split(pre_flag)
+          (arr(8),arr(3),arr(5),arr(12),line)
+        }
+      })
+
+    //dataB 获取有效测试字段
+    val dataBMapDstream = 
+      s1uKafkaSource.map(new RichMapFunction[String,(String, String, String, String)]{
+        //通过与比较当前时间和事间时间实现监测数据延迟情况
+        //flink自带值类
+        //@transient
+        private var delayTime = new LongValue()
+        override def open(params: Configuration) {
+          getRuntimeContext().getMetricGroup()
+            .gauge[Long, ScalaGauge[Long]](
+            "delay_dataB", ScalaGauge[Long]( () => delayTime.getValue ) )
+        }
+        override def map(line: String) = {
+          delayTime.setValue(competeTime(line.split(pre_flag)(1)))
+          val arr = line.split(pre_flag)
+          val u_type = arr(0)
+          u_type match {
+            case "3" =>
+              (arr(1),arr(4),arr(6),line)
+            case _ =>
+              (arr(1),arr(3),arr(4),line)
+          }
+        }
+      })
+
+    import org.apache.flink.streaming.api.windowing.time.Time
+
+    /*
+     * 数据关联
+     */
+    val rele1 = dataBMapDstream.coGroup(dataAMapDstream)
+      .where(_._2)
+      .equalTo(_._2)
+      .window(TumblingEventTimeWindows.of(Time.minutes(30)))
+      .apply{(dataBIter: Iterator[(String, String, String, String)],
+              dataAIter: Iterator[(String, String, String, String, String)],
+              out: Collector[String]) =>
+        val tempList = new ListBuffer[(String, String, String, String, String)]
+        //dataB - (STARTTIME,IMSI,MSISDN,line)
+        val dataBList = new ListBuffer[(String, String, String, String)]
+        while (dataBIter.hasNext) {
+          dataBList += dataBIter.next()
+        }
+        //dataA - (STARTTIME,IMSI,MSISDN,XDRID,line)
+        val dataAList = new ListBuffer[(String, String, String, String, String)]
+        while (dataAIter.hasNext){
+          dataAList += dataAIter.next()
+        }
+        for (dataB <- dataBList) {
+          tempList.clear()
+          for (dataA <- dataAList) {
+            if (millisSub(dataA._1, dataB._1) && dataB._2 != "") {
+              tempList += dataA
+            }
+          }
+          if(tempList.nonEmpty){
+            //取出s1mmeSTARTTIME最大值（即距离s1uSTARTTIME最近值）
+            val temps1mme = tempList.sortWith((t1,t2) => passTime(t1._1) > passTime(t2._1)).head
+            //dataA|dataB|xx
+            out.collect(temps1mme._5+"|"+dataB._4+"|"+temps1mme._4)
+          }
+        }
+      }
+
+
+    val rele2 = dataBMapDstream.coGroup(dataAMapDstream)
+      .where(_._3)
+      .equalTo(_._3)
+      .window(TumblingEventTimeWindows.of(Time.minutes(30)))
+      .apply{(dataBIter: Iterator[(String, String, String, String)],
+              dataAIter: Iterator[(String, String, String, String, String)],
+              out: Collector[String]) =>
+        val tempList = new ListBuffer[(String, String, String, String, String)]
+        //dataB - (STARTTIME,IMSI,MSISDN,line)
+        val dataBList = new ListBuffer[(String, String, String, String)]
+        while (dataBIter.hasNext) {
+          dataBList += dataBIter.next()
+        }
+        //dataA - (STARTTIME,IMSI,MSISDN,XDRID,line)
+        val dataAList = new ListBuffer[(String, String, String, String, String)]
+        while (dataAIter.hasNext){
+          dataAList += dataAIter.next()
+        }
+        for (dataB <- dataBList) {
+          tempList.clear()
+          for (dataA <- dataAList) {
+            if (millisSub(dataA._1, dataB._1) && dataB._3 != "") {
+              tempList += dataA
+            }
+          }
+          if(tempList.nonEmpty){
+            //取出s1mmeSTARTTIME最大值（即距离s1uSTARTTIME最近值）
+            val temps1mme = tempList.sortWith((t1,t2) => passTime(t1._1) > passTime(t2._1)).head
+            //dataA|dataB|xx
+            out.collect(temps1mme._5+"|"+dataB._4+"|"+temps1mme._4)
+          }
+        }
+      }
+
+    /*
+     * 关联数据输出
+     */
+    // 定义 OutputTag:用于输出回填率
+    val outputTag = new OutputTag[Tuple2[String,String]]("sideOutput-releRate")
+
+    val S1mmeS1uRele = rele1
+      .union(rele2,dataBMapDstream.map(tup => "dataB"))
+      .windowAll(TumblingEventTimeWindows.of(Time.minutes(30)))
+      .process(new ProcessAllWindowFunction[String, String, TimeWindow]{
+        override def process(context: Context, elements: Iterable[String], out: Collector[String]): Unit = {
+          //总关联：根据IMSI或MSISDN
+          val releSet = elements.toSet.filter(str => "dataB" != str)
+          val releIter = releSet.iterator
+          //回填率(0.000%) = 总关联条数 / s1u总数
+          val releRate = (releSet.size.toDouble) / (elements.count(str => "dataB" == str).toDouble)
+          for(it <- releIter){
+            out.collect(it)
+          }
+          //窗口时间
+          val windowStart = context.window.getStart
+          val windowEnd = context.window.getEnd
+          //旁路输出: (windowStart-windowEnd,releRate)
+          context.output(outputTag,(windowStart+"-"+windowEnd,"%5.3f%%".format(releRate)))
+        }
+      })
+		
+    //回填字段 --> 暂时输出hdfs
+    S1mmeS1uRele.addSink(hadoopSink(hdfsPath+"/relefield",8))
+      .name("releField2hdfs")
+
+    //回填率 --> 输出redis
+    val  releRate = S1mmeS1uRele.getSideOutput(outputTag)
+    releRate.addSink(new RedisSink[(String,String)](redisConf, new RedisSetSinkMapper()))
+      .setParallelism(1)
+      .name("releRate2redis")
+
+
+    env.execute("DataRele-flink")
+
+  }
+
+ }
+
+  /**
+    * 定义时间戳和水印
+    */
+  class timestampExtractor(index: Int) extends AssignerWithPeriodicWatermarks[String]
+    with Serializable {
+
+    //The current maximum timestamp seen so far
+    private var currentMaxTimestamp = 0L
+
+    //The timestamp of the last emitted watermark
+    private var lastEmittedWatermark: Long = Long.MinValue
+
+    //最大允许的乱序时间: 120*1000ms
+    private var maxOutOfOrderness = 120000L
+
+    override def getCurrentWatermark: Watermark = {
+      new Watermark(currentMaxTimestamp - maxOutOfOrderness)
+    }
+
+    override def extractTimestamp(t: String, l: Long): Long = {
+      val timestamp = passTime(t.split(pre_flag)(index))
+      currentMaxTimestamp = Math.max(timestamp, currentMaxTimestamp)
+      timestamp
+    }
+  }
+
+  class RedisSetSinkMapper() extends RedisMapper[Tuple2[String,String]] {
+    /*
+      * 设置使用的redis数据结构类型，和key的名词，通过RedisCommand设置数据结构类型
+     */
+    override def getCommandDescription: RedisCommandDescription = {
+      new RedisCommandDescription(RedisCommand.SET)
+    }
+    /*
+     * 设置value中的键值对 key的值
+     */
+    override def getKeyFromData(data: (String, String)): String = data._1
+    /*
+     * 设置value中的键值对 value的值
+     */
+    override def getValueFromData(data: (String, String)): String = data._2
+  }
+
+}

@@ -1,0 +1,377 @@
+def main(args: Array[String]): Unit = {
+      //构建flink流式计算环境
+      val env = FlinkUtils.initFlinkEnv()
+
+      //整合kafka环境
+      val consumer_cmis = FlinkUtils.initKafkaFlink_cmis()
+      val consumer_ycloans = FlinkUtils.initKafkaFlink_ycloans()
+      //val consumer_cms = FlinkUtils.initKafkaFlink_cms()
+
+
+      //kafka每个topic的source
+      //cmis
+      val kafkaDataStream_cmis: DataStream[String] = env.addSource(consumer_cmis)
+      kafkaDataStream_cmis.print()
+
+      //ycloans
+      val kafkaDataStream_ycloans: DataStream[String] = env.addSource(consumer_ycloans)
+      kafkaDataStream_ycloans.print()
+
+      /**
+       * 1_1.cmis.lc_appl当天数据实时流 实时加工逻辑  贷款申请的主要信息表
+       * 自定义fiter函数
+       * 过滤 op_type = "I" AND APPLY_DT = CURRENT_DATE AND
+       */
+
+      val datastream_cmis: DataStream[JSONObject] = kafkaDataStream_cmis.rescale.map(line => {
+        // print(line)
+        val replaceLine = line.replace("\"null\"", "\"_\"").replace("null", "\"_\"")
+        val json = JSON.parseObject(replaceLine)
+        json
+      })
+
+          val lc_appl_datastream_day: DataStream[JSONObject] = datastream_cmis.filter(
+            new FilterFunction[JSONObject] {
+              override def filter(json: JSONObject): Boolean = {
+                val df: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val time: LocalDateTime = LocalDateTime.now()
+                val localTime: String = df.format(time)
+                //操作类型
+                val opType = json.getString("op_type")
+                println(opType)
+                //解析操作时间
+                val op_ts = json.getString("op_ts")
+                println(op_ts)
+                //详细内容
+                var content = ""
+                if ("I".equals(opType) || "U".equals(opType)) {
+                  content = json.getString("after")
+                  //操作类型
+                  val opType = json.getString("op_type")
+                  val contents = JSON.parseObject(content)
+                  val APPLY_DT: String = contents.getString("APPLY_DT")
+                  val IF_LH_LOAN: String = contents.getString("IF_LH_LOAN")
+                 // val LOAN_TYP: String = contents.getString("LOAN_TYP")
+                  //ogg日志解析的table名字
+                  val table: String = json.getString("table")
+                  println(content)
+                  if ("I".equals(opType) && localTime.equals(APPLY_DT) && "CMIS.LC_APPL".equals(table) ) {
+                    true
+                  } else {
+                    false
+                  }
+                } else {
+                  val contents = JSON.parseObject(content)
+                  //操作类型
+                  val opType = json.getString("op_type")
+                  val APPLY_DT: String = contents.getString("APPLY_DT")
+                  val IF_LH_LOAN: String = contents.getString("IF_LH_LOAN")
+                  //ogg日志解析的table名字
+                  val table: String = json.getString("table")
+                  println(content)
+                  if ("I".equals(opType) && localTime.equals(APPLY_DT) && "CMIS.LC_APPL".equals(table) ) {
+                    true
+                  } else {
+                    false
+                  }
+                }
+              }
+            }
+          )
+     val lc_appl_datastream_online: DataStream[PhoenixReaderDataStreams] =
+            lc_appl_datastream_day.map(
+            line => {
+              //操作类型
+              val opType = line.getString("op_type")
+              println(opType)
+              //解析操作时间
+              val op_ts = line.getString("op_ts")
+              println(op_ts)
+              //详细内容
+              var content = ""
+              if ("I".equals(opType) || "U".equals(opType)) {
+                content = line.getString("after")
+                println(content)
+              } else {
+                content = line.getString("before")
+                println(content)
+              }
+              val contents = JSON.parseObject(content)
+              //操作类型
+              val APPL_SEQ: String = contents.getString("APPL_SEQ")
+              val APP_ORIGIN: String = contents.getString("APP_ORIGIN")
+              val ID_NO: String = contents.getString("ID_NO")
+              val APPLY_DT: String = contents.getString("APPLY_DT")
+              val IF_LH_LOAN: String = contents.getString("IF_LH_LOAN")
+              val LOAN_TYP: String = contents.getString("LOAN_TYP")
+              PhoenixReaderDataStreams(APPL_SEQ, APP_ORIGIN, ID_NO,APPLY_DT,IF_LH_LOAN,LOAN_TYP,op_ts)
+            }
+          ).name("cmis.lc_appl当天数据实时流 实时加工逻辑")
+
+
+      println("cmis.lc_appl当天数据实时流 实时加工逻辑" + lc_appl_datastream_online)
+
+
+
+  
+      /**
+       * 2.cmis.lpb_appl_dn当天数据实时流 实时加工逻辑   放款申请表
+       * 自定义fiter函数
+       * 过滤 op_type = "I" AND DN_DT = CURRENT_DATE AND
+       */
+      val lpb_appl_dn_datastream_day: DataStream[JSONObject] = datastream_cmis.filter(
+        new FilterFunction[JSONObject] {
+          override def filter(json: JSONObject): Boolean = {
+            val df: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val time: LocalDateTime = LocalDateTime.now()
+            val localTime: String = df.format(time)
+            //操作类型
+            val opType = json.getString("op_type")
+            println(opType)
+            //解析操作时间
+            val op_ts = json.getString("op_ts")
+            println(op_ts)
+            //详细内容
+            var content = ""
+            if ("I".equals(opType) || "U".equals(opType)) {
+              content = json.getString("after")
+              //操作类型
+              val opType = json.getString("op_type")
+              val contents = JSON.parseObject(content)
+              val DN_DT: String = contents.getString("DN_DT")
+              //ogg日志解析的table名字
+              val table: String = json.getString("table")
+              println(content)
+              if ("I".equals(opType) && localTime.equals(DN_DT) && "CMIS.LPB_APPL_DN".equals(table)) {
+                true
+              } else {
+                false
+              }
+            } else {
+              val contents = JSON.parseObject(content)
+              //操作类型
+              val opType = json.getString("op_type")
+              val DN_DT: String = contents.getString("DN_DT")
+              //ogg日志解析的table名字
+              val table: String = json.getString("table")
+              println(content)
+              if ("I".equals(opType) && localTime.equals(DN_DT) && "CMIS.LPB_APPL_DN".equals(table)) {
+                true
+              } else {
+                false
+              }
+            }
+          }
+        }
+      )
+
+      case class lpb_appl_dn_datastreams(LOAN_NO: String, APPL_SEQ:String,op_ts:String)
+      val lpb_appl_dn_datastream_online: DataStream[lpb_appl_dn_datastreams] = lpb_appl_dn_datastream_day.map(
+        line => {
+          //操作类型
+          val opType = line.getString("op_type")
+          println(opType)
+          //解析操作时间
+          val op_ts = line.getString("op_ts")
+          println(op_ts)
+          //详细内容
+           val content = line.getString("after")
+            println(content)
+          val contents = JSON.parseObject(content)
+          //操作类型
+          val LOAN_NO: String = contents.getString("LOAN_NO")
+          val APPL_SEQ: String = contents.getString("APPL_SEQ")
+          lpb_appl_dn_datastreams(LOAN_NO, APPL_SEQ,op_ts)
+        }
+      ).name("cmis.lpb_appl_dn当天数据实时流 实时加工逻辑 ")
+
+
+
+
+
+      println("lpb_appl_dn实时流"+ lpb_appl_dn_datastream_online)
+
+      /**
+       * 3.ycloans.lm_loan当天数据实时流 实时加工逻辑    借据表
+       * 自定义fiter函数
+       * 过滤 op_type = "I" AND LOAN_ACTV_DT = CURRENT_DATE
+       * LOAN_STS IN ('ACTV','SETL')
+       */
+      val datastream_ycloans: DataStream[JSONObject] = kafkaDataStream_ycloans.rescale.map(line => {
+        // print(line)
+        val replaceLine = line.replace("\"null\"", "\"_\"").replace("null", "\"_\"")
+        val json = JSON.parseObject(replaceLine)
+        json
+      })
+
+      val lm_loan_datastream_day: DataStream[JSONObject] = datastream_ycloans.filter(
+        new FilterFunction[JSONObject] {
+          override def filter(json: JSONObject): Boolean = {
+            val df: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val time: LocalDateTime = LocalDateTime.now()
+            val localTime: String = df.format(time)
+            //操作类型
+            val opType = json.getString("op_type")
+            println(opType)
+            //解析操作时间
+            val op_ts = json.getString("op_ts")
+            println(op_ts)
+            //详细内容
+            var content = ""
+            if ("I".equals(opType) || "U".equals(opType)) {
+              content = json.getString("after")
+              //操作类型
+              val opType = json.getString("op_type")
+              val contents = JSON.parseObject(content)
+              val LOAN_ACTV_DT: String = contents.getString("LOAN_ACTV_DT")
+              //ogg日志解析的table名字
+              val table: String = json.getString("table")
+              println(content)
+              //val LOAN_STS: String = json.getString("LOAN_STS")
+              if ("I".equals(opType) && localTime.equals(LOAN_ACTV_DT) && "YCLOANS.LM_LOAN".equals(table)) {
+                true
+              } else {
+                false
+              }
+            } else {
+              val contents = JSON.parseObject(content)
+              //操作类型
+              val opType = json.getString("op_type")
+              val LOAN_ACTV_DT: String = contents.getString("LOAN_ACTV_DT")
+              //ogg日志解析的table名字
+              val table: String = json.getString("table")
+              println(content)
+              //val LOAN_STS: String = json.getString("LOAN_STS")
+              if ("I".equals(opType) && localTime.equals(LOAN_ACTV_DT) && "YCLOANS.LM_LOAN".equals(table) ) {
+                true
+              } else {
+                false
+              }
+            }
+          }
+        }
+      )
+      case class lm_loan_datastreams(LOAN_ACTV_DT: String, ORIG_PRCP: String, LOAN_NO: String, CUST_NAME: String,LOAN_STS:String,op_ts:String)
+      val lm_loan_datastream_online: DataStream[lm_loan_datastreams] = lm_loan_datastream_day.map(
+        line => {
+          //操作类型
+          val opType = line.getString("op_type")
+          println(opType)
+          //解析操作时间
+          val op_ts = line.getString("op_ts")
+          println(op_ts)
+          //详细内容
+          val content = line.getString("after")
+          val contents = JSON.parseObject(content)
+          //放款日期
+          val LOAN_ACTV_DT: String = contents.getString("LOAN_ACTV_DT")
+          //发放金额
+          val ORIG_PRCP: String = contents.getString("ORIG_PRCP")
+          val LOAN_NO: String = contents.getString("LOAN_NO")
+          val CUST_NAME: String = contents.getString("CUST_NAME")
+          val LOAN_STS: String = contents.getString("LOAN_STS")
+          lm_loan_datastreams(LOAN_ACTV_DT, ORIG_PRCP, LOAN_NO, CUST_NAME,LOAN_STS,op_ts)
+        }
+      ).name("ycloans.lm_loan当天数据实时流 实时加工逻辑")
+
+
+      println("lm_loan_datastream_online实时流" + lm_loan_datastream_online)
+
+
+      /**
+       * 7  Interval Join 操作
+       * 1_2) 借据表和放款申请表关联  step 1 关联操作
+       * 每个用户的借据Join这个用户最近10分钟内的放款申请
+       */
+      val JoinedStreams1: DataStream[JoinedStreams1s] = lpb_appl_dn_datastream_online.keyBy(_.LOAN_NO).intervalJoin(lm_loan_datastream_online.keyBy(_.LOAN_NO))
+        // 时间间隔,设定下界和上界
+        // 下界: 10分钟前，上界: 当前EventTime时刻
+        .between(Time.minutes(-3), Time.seconds(0))
+        // 不包含下界
+        .lowerBoundExclusive()
+        // 不包含上界
+        .upperBoundExclusive()
+        // 自定义ProcessJoinFunction 处理Join到的元素
+        .process(new ProcessJoinFunction[lpb_appl_dn_datastreams, lm_loan_datastreams, JoinedStreams1s] {
+          override def processElement(left: lpb_appl_dn_datastreams, right: lm_loan_datastreams, ctx: ProcessJoinFunction[lpb_appl_dn_datastreams, lm_loan_datastreams, JoinedStreams1s]#Context, out: Collector[JoinedStreams1s]): Unit = {
+            out.collect(JoinedStreams1s(right.LOAN_ACTV_DT, right.LOAN_NO, right.CUST_NAME, right.ORIG_PRCP, right.LOAN_STS, left.APPL_SEQ))
+          }
+        })
+
+      println("双流join1"+ JoinedStreams1)
+
+      JoinedStreams1.name("step 1 借据表和放款申请表的关联").print()
+
+      /**
+       * 7 inner join 操作
+       * 2) 关联贷款申请表 step 2 关联操作
+       */
+    // case class JoinedStreams2s(LOAN_ACTV_DT:String,LOAN_NO:String,CUST_NAME:String,ORIG_PRCP:String,APPLY_DT:String,ID_NO:String,APPL_SEQ:String,APP_ORIGIN:String,IF_LH_LOAN:String,LOAN_TYP:String)
+//      val JoinedStreams2: DataStream[JoinedStreams2s] = JoinedStreams1.join(lc_appl_datastream_online)
+//        .where(_.APPL_SEQ)
+//        .equalTo(_.APPL_SEQ)
+//        .window(TumblingEventTimeWindows.of(Time.minutes(1)))
+//        .apply { (t1:JoinedStreams1s , t2:PhoenixReaderDataStreams , out: Collector[JoinedStreams2s]) =>
+//          out.collect(JoinedStreams2s(t1.LOAN_ACTV_DT, t1.LOAN_NO, t1.CUST_NAME, t1.ORIG_PRCP,
+//            t1.LOAN_STS, t2.APPLY_DT, t2.ID_NO,t2.APPL_SEQ,t2.APP_ORIGIN,t2.IF_LH_LOAN,t2.LOAN_TYP))
+//        }
+//
+//      println("双流join2" + JoinedStreams2)
+      /**
+       * JoinedStreams1join贷款申请表最近三天的数据
+       */
+      val JoinedStreams2: DataStream[JoinedStreams2s] = JoinedStreams1.keyBy(_.APPL_SEQ).intervalJoin(lc_appl_datastream_online.keyBy(_.APPL_SEQ))
+        // 时间间隔,设定下界和上界
+      // 上界: 当前EventTime时刻，下界: 三天前
+        .between(Time.days(-3),Time.seconds(0))
+        // 不包含下界
+        .lowerBoundExclusive()
+        // 不包含上界
+        .upperBoundExclusive()
+        // 自定义ProcessJoinFunction 处理Join到的元素
+        .process(new ProcessJoinFunction[JoinedStreams1s, PhoenixReaderDataStreams, JoinedStreams2s] {
+          override def processElement(left: JoinedStreams1s, right: PhoenixReaderDataStreams, ctx: ProcessJoinFunction[JoinedStreams1s, PhoenixReaderDataStreams, JoinedStreams2s]#Context, out: Collector[JoinedStreams2s]): Unit = {
+            out.collect(JoinedStreams2s(left.LOAN_ACTV_DT, left.LOAN_NO, left.CUST_NAME, left.ORIG_PRCP, left.LOAN_STS, right.APPLY_DT, right.ID_NO, right.APPL_SEQ, right.APP_ORIGIN, right.IF_LH_LOAN, right.LOAN_TYP))
+          }
+        }).name("JoinedStreams1实时流join贷款申请表最近三天的实时流数据")
+
+      println("双流join2" + JoinedStreams2)
+
+      val value: DataStream[dwd_user_lending_info] = JoinedStreams2.map(item => {
+        dwd_user_lending_info(item.LOAN_ACTV_DT, item.IF_LH_LOAN, item.LOAN_NO, item.ID_NO, item.ORIG_PRCP,item.LOAN_STS, item.CUST_NAME, item.APPLY_DT, item.LOAN_TYP, item.APPL_SEQ,item.APP_ORIGIN)
+      })
+
+   
+      value.name("step 2 lc_appl贷款申请表与step1流join").print()
+
+
+      println("落地hbase dwd表数据" + value)
+      
+
+
+
+
+      /**
+       * 8 聚合宽表落地 hbase dwd层
+       */
+      value.addSink(new HbaseWriter_dwd_lending_user_info("TEMP.TEMP_LENDING_USER_INFO","bd-03,bd-04,bd-05"))
+        .name("聚合宽表落地 hbase dwd层  DWD_LENDING_USSER_INFO")
+
+
+      /**
+       * 9 结果表写入Kafka websocket流实时获取
+       */
+
+
+      /**
+       * 10 结果表异步写入hbase 留存数据
+       */
+
+
+
+      env.execute("实时数仓DWD层_DWD_LENDING_USER_INFO")
+
+    }
+
+
+}

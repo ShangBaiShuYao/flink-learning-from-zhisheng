@@ -1,0 +1,91 @@
+public static void main(String[] args) throws Exception {
+        final ParameterTool parameterTool = ExecutionEnvUtil.createParameterTool(args);
+        StreamExecutionEnvironment env = ExecutionEnvUtil.prepare(parameterTool);
+
+        DataStreamSource<XlogStreamBasicBean> data = KafkaTools.buildTraceSource(env);
+        // 处理diy的数据并用key分组
+        processApiData(parameterTool, data);
+        env.execute("xlog-trace-compute");
+    }
+
+    /**
+     * 处理diy和key关系对的数据
+     *
+     * @param parameterTool
+     * @param data
+     * @throws Exception
+     */
+    private static void processApiData(ParameterTool parameterTool, DataStreamSource<XlogStreamBasicBean> data) throws Exception {
+        // 获取过滤后的砍价金额数据
+        SingleOutputStreamOperator<XlogStreamBasicBean> diyAndKeyStream = data
+                .filter(filter -> XAPI.equalsIgnoreCase(filter.getType()) && GET_DISCOUNT_MONEY.equalsIgnoreCase(filter.getUrl()))
+                .name("过滤砍价数据").uid("filter_discount_money_data");
+
+        processDiscountMoneyData(parameterTool, diyAndKeyStream);
+    }
+
+private static void processDiscountMoneyData(ParameterTool parameterTool, SingleOutputStreamOperator<XlogStreamBasicBean> discountMoneyStream) throws Exception {
+
+    // 计算各个页面的IMG错误数量
+    discountMoneyStream
+            .map((MapFunction<XlogStreamBasicBean, ConvertBean>) basicBean -> new ConvertBean("discount_money", ONE_MINUTE, basicBean.getDiscountMoney())).name("砍价类型转换").uid("map_discount_money_data")
+            .returns(ConvertBean.class).uid("return-discount-money-type").name("返回类型")
+            .keyBy(event -> event.page)
+            .timeWindow(Time.minutes(1))
+            .reduce((ReduceFunction<ConvertBean>) (value1, value2) -> value1.add(value2.money), new SumWindowFunction()).name("砍价REDUCE过程").uid("reduce_discount_money_count")
+            .addSink(getSinkFunction(parameterTool)).name("输出砍价金额值到KAFKA").uid("sink_discount_money_to_kafka");
+}
+
+
+public class SumWindowFunction implements WindowFunction<ConvertBean, MetricResultBean, String, TimeWindow> {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Override
+    public void apply(String s, TimeWindow window, Iterable<ConvertBean> elements, Collector<MetricResultBean> out) throws Exception {
+        try {
+            double money = 0;
+            for (ConvertBean element : elements) {
+                money += element.money;
+                logger.info("{}的值是{}", DateTimeUtil.formatDate(window.getStart()), element.money);
+            }
+            MetricResultBean metricResultBean = MetricResultBean.builder()
+                    .ch(null)
+                    .page(null)
+                    .summation(money)
+                    .dimension(ONE_MINUTE)
+                    .name("discount_money")
+                    .statisticsType(METRIC_TYPE_SUM)
+                    .time(DateTimeUtil.formatDate(window.getStart())).build();
+            generateId(metricResultBean);
+            out.collect(metricResultBean);
+
+        } catch (Exception e) {
+            throw new Exception("discount_money数据错误:", e);
+        }
+    }
+}
+
+
+
+// ====================== 测试数据 =========
+    private static String[] TEST_DATA = new String[]{
+            "{\"date_logTime\":\"2020-05-06T12:48:05.298+0800\",\"discount_money\":1.5,\"pt\":\"hotel-detail\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:15.298+0800\",\"discount_money\":2.5,\"pt\":\"hotel-detail\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:25.298+0800\",\"discount_money\":4.5,\"pt\":\"hotel-detail\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:35.298+0800\",\"discount_money\":7.5,\"pt\":\"hotel-detail\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:45.298+0800\",\"discount_money\":9.5,\"pt\":\"hotel-detail\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.666+0800\",\"discount_money\":0.2,\"pt\":\"hotel-detail\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:15.298+0800\",\"discount_money\":0.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:33.298+0800\",\"discount_money\":11.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:35.298+0800\",\"discount_money\":0.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:43.298+0800\",\"discount_money\":0.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.299+0800\",\"discount_money\":0.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.300+0800\",\"discount_money\":0.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.291+0800\",\"discount_money\":0.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.292+0800\",\"discount_money\":5.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"xcx\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.293+0800\",\"discount_money\":5.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"h5\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.294+0800\",\"discount_money\":5.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"h5\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.295+0800\",\"discount_money\":5.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"h5\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.296+0800\",\"discount_money\":5.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"h5\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}",
+            "{\"date_logTime\":\"2020-05-06T12:48:55.298+0800\",\"discount_money\":5.5,\"pt\":\"hotel-list\",\"url\":\"getDiscountMoney\",\"type\":\"xapi\",\"key_ck_AUTH_UNIONID\":\"ohmdTtxpX5MK54uLFlQ0hpENx41U\",\"app_id\":\"wxqbh5\",\"cardno\":\"240000000802050515\",\"ch\":\"h5\",\"key_ck_H5CookieId\":\"48b132cb-f40b-4cf5-bf7f-b6411525b1982\"}"
+    };

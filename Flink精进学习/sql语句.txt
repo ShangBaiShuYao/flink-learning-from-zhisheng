@@ -1,0 +1,11 @@
+ "SELECT abKey,userGroup,tradeOrderCreateDateTime,appId,merchantId,payStatusId,payClassId,paySucMtPayClassId," +
+"CallCashierPartnerOrderId,ConfirmPayPartnerOrderId,paySucPartnerOrderId," +
+"CallCashierUserId,ConfirmPayUserId,paySucUserId\n" +
+"FROM ( " +
+"   SELECT abKey,userGroup,tradeOrderCreateDateTime,appId,merchantId,-1 payStatusId,-1 payClassId,-1 paySucMtPayClassId," +
+"   CallCashierPartnerOrderId,CAST(-1 as VARCHAR) AS ConfirmPayPartnerOrderId,CAST(-1 as VARCHAR) AS paySucPartnerOrderId," +
+"   CAST(-1 AS BIGINT) CallCashierUserId,CAST(-1 AS BIGINT) ConfirmPayUserId,CAST(-1 AS BIGINT) paySucUserId,\n" +
+"   ROW_NUMBER() OVER (PARTITION BY abKey,userGroup,CallCashierPartnerOrderId\n" +
+"       ORDER BY tradeOrderCreateDateTime desc) AS rownum\n" +
+"   FROM strategyTradeResultTable)\n" +
+"WHERE rownum = 1";

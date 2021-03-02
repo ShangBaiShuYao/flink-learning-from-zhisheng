@@ -1,0 +1,170 @@
+package com.syxf.test
+
+import com.syxf.util.DatetoTimestamp.tranTimeToLong
+import com.syxf.bean.TestPhoenix
+import com.syxf.util.FlinkUtils
+import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks
+import org.apache.flink.streaming.api.watermark.Watermark
+import org.apache.hadoop.hbase.client.{BufferedMutator, Connection}
+//隐式转换需要调用
+import org.apache.flink.api.common.io.OutputFormat
+import org.apache.flink.configuration.Configuration
+import org.apache.flink.streaming.api.datastream.DataStreamSink
+import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment, _}
+import org.apache.hadoop.hbase.client.{BufferedMutator, _}
+import org.apache.hadoop.hbase.util.Bytes
+import org.apache.hadoop.hbase.{HBaseConfiguration, HConstants, TableName}
+
+object TestPhonixToKafka {
+
+  def main(args: Array[String]): Unit = {
+    // Flink流式环境的创建
+    val env = FlinkUtils.initFlinkEnv()
+
+    // 整合Kafka
+    val consumer = FlinkUtils.initKafkaFlink()
+
+    // 测试打印
+    val kafkaDataStream: DataStream[String] = env.addSource(consumer)
+//        kafkaDataStream.print()
+
+    /**
+     * 使用map算子 将kafka消费到的数据解析成一个元祖
+     */
+    val tupleDataStream: DataStream[TestPhoenix] = kafkaDataStream.map(format(_))
+//        tupleDataStream.print()
+
+
+    //    添加水印支持
+    //    抽取timestamp和生成watermark 周期性的生成watermark
+    var watermarkDataStream = tupleDataStream.assignTimestampsAndWatermarks(new AssignerWithPeriodicWatermarks[TestPhoenix] {
+      var currentTimeStamp = 0l
+
+      // 最大允许的延迟时间 延迟1秒发车
+      var maxDelayTime = 1000l
+
+      // 获取当前时间戳 生成waterMark的方法
+      override def getCurrentWatermark: Watermark = {
+        //当前最大时间戳-延迟时间
+        new Watermark(currentTimeStamp - maxDelayTime)
+      }
+
+      // 获取事件时间
+      override def extractTimestamp(element: TestPhoenix, previousElementTimestamp: Long): Long = {
+        //更新为最大的时间戳并保存
+        currentTimeStamp = Math.max(element.timeStamp.toLong, previousElementTimestamp)
+        currentTimeStamp
+      }
+    })
+    //打印到本地控制台
+//          watermarkDataStream.print()
+
+    val value: DataStreamSink[TestPhoenix] = watermarkDataStream.writeUsingOutputFormat(new HBaseOutputFormat)
+    value
+      .name("hbase-sink")
+    env.execute("com.syxf.test.TestPhoenix")
+  }
+
+  /**
+   *
+   * @param log
+   * @return
+   * 字段格式化 转化方法 产生时间戳 方便watermark容错
+   */
+
+  def format(log: String) = {
+    val split = log.split("\t")
+    val timeStamp = tranTimeToLong(split(1))
+//    print(timeStamp)
+    TestPhoenix(split(0), split(1), split(2), split(3), split(4), timeStamp.toString.substring(0, 13))
+  }
+
+  //sink到HBASE
+  /**
+   * Flink批量编写hbase
+   * 写入hbase提供两种方式
+   * 批量写入效率较高 实现outputformat
+   */
+
+  /**
+   * 配置输出格式 此方法总是在实例化输出格式上首先调用的
+   */
+  class HBaseOutputFormat extends OutputFormat[TestPhoenix] with Serializable {
+    val zkServer = "192.168.157.133"
+    val port = "2181"
+    var conn: Connection = null
+    var mutator: BufferedMutator = null
+    var count = 0
+
+    /**
+     * @param parameters
+     */
+    override def configure(parameters: Configuration): Unit = {
+    }
+
+    /**
+     *
+     * @param taskNumber
+     * @param numTasks
+     * 用于打开输出格式的并行实例，所以在open方法中我们会进行hbase的连接，配置，建表等操作。
+     * 注意：由于flink是一条一条的处理数据，所以我们在插入hbase的时候不能来一条flush下，
+     * 不然会给hbase造成很大的压力，而且会产生很多线程导致集群崩溃，所以线上任务必须控制flush的频率。
+     * 解决方案：我们可以在open方法中定义一个变量，然后在写入hbase时比如500条flush一次，或者加入一个list，判断list的大小满足某个阀值flush一下
+     */
+    override def open(taskNumber: Int, numTasks: Int): Unit = {
+      val config: org.apache.hadoop.conf.Configuration = HBaseConfiguration.create
+      config.set(HConstants.ZOOKEEPER_QUORUM, zkServer)
+      config.set(HConstants.ZOOKEEPER_CLIENT_PORT, port)
+      config.setInt(HConstants.HBASE_CLIENT_OPERATION_TIMEOUT, 30000)
+      config.setInt(HConstants.HBASE_CLIENT_SCANNER_TIMEOUT_PERIOD, 30000)
+      config.set(HConstants.ZOOKEEPER_ZNODE_PARENT, "/hbase-unsecure")
+      //获取连接
+      conn = ConnectionFactory.createConnection(config)
+      print(conn)
+      val tableName: TableName = TableName.valueOf("testphonix")
+      print(tableName)
+      val params: BufferedMutatorParams = new BufferedMutatorParams(tableName)
+      //      //设置缓存1m，当达到1m时数据会自动刷到hbase
+      params.writeBufferSize(1024 * 1024) //设置缓存的大小
+      mutator = conn.getBufferedMutator(params)
+      //      print(mutator)
+      count = 0
+    }
+
+    /**
+     * 将数据写入数据源 所以我们会在这个方法中调用写入hbase的API
+     *
+     * @param record
+     */
+    override def writeRecord(record: TestPhoenix): Unit = {
+      val cf1 = "testphonix"
+      val put: Put = new Put(Bytes.toBytes(record.ip))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("ip"), Bytes.toBytes(record.ip))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("newtime"), Bytes.toBytes(record.newtime))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("referer"), Bytes.toBytes(record.referer))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("url"), Bytes.toBytes(record.url))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("code"), Bytes.toBytes(record.code))
+      put.addColumn(Bytes.toBytes(cf1), Bytes.toBytes("timeStamp"), Bytes.toBytes(record.timeStamp))
+      mutator.mutate(put)
+      //      print(put)
+      //      每500条刷新一下数据，如果是批处理调用outputFormat，这里填写的500必须不能大于批处理的记录总数量，否则数据不会更新到hbase里面
+      if (count >= 500) {
+        mutator.flush()
+        count = 0
+      }
+      count = count + 1
+    }
+
+    /**
+     * 关闭
+     */
+    override def close(): Unit = {
+      try {
+        if (conn != null)
+          conn.close()
+      } catch {
+        case e: Exception => println(e.getMessage)
+      }
+    }
+  }
+}
