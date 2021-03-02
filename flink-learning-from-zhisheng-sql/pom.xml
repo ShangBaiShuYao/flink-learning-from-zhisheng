@@ -15,6 +15,4 @@
         <module>flink-learning-sql-common</module>
         <module>flink-learning-sql-ago</module>
     </modules>
-
-
 </project>
