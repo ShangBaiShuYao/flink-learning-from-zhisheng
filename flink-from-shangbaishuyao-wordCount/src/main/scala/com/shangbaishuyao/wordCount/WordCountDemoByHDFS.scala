@@ -1,6 +1,5 @@
 package com.shangbaishuyao.wordCount
 
-import org.apache.flink.api.java.tuple.Tuple
 import org.apache.flink.api.scala.{AggregateDataSet, DataSet, ExecutionEnvironment, GroupedDataSet}
 import org.apache.flink.streaming.api.scala._
 /**

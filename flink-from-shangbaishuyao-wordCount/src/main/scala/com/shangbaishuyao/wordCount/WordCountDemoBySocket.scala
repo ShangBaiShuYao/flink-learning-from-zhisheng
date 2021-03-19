@@ -16,7 +16,7 @@ object WordCountDemoBySocket {
     //批处理的上下文
 //    val env: ExecutionEnvironment = ExecutionEnvironment.getExecutionEnvironment
     //读取数据得到DataStream
-//    val stream1: DataStream[String] = streamEnv.readTextFile("D:\\IdeaProjects\\0615Flink\\datas\\wc.txt")
+//    val stream1: DataStream[String] = streamEnv.readTextFile("D:\\IdeaProjects\\Flink\\datas\\wc.txt")
     //读取netcat流中数据 （实时流）
     val stream1: DataStream[String] = streamEnv.socketTextStream("hadoop101",7777)
     //调用DataStream的转换算子

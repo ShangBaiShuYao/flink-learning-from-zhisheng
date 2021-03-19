@@ -8,7 +8,11 @@ import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
  * @param timestamp 产生数据的时间，精确到秒
  * @param temperature
  */
-case  class SensorReader(id:String,timestamp:Long,temperature:Double)
+case  class SensorReader(
+                          id:String,timestamp:Long,
+                          temperature:Double)
+
+
 object FromCollectionSource {
   def main(args: Array[String]): Unit = {
     val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
@@ -23,3 +27,4 @@ object FromCollectionSource {
     env.execute()
   }
 }
+
