@@ -14,6 +14,7 @@
         <module name="flink-learning-sql-common" />
         <module name="flink-learning-connectors-flume" />
         <module name="flink-learning-connectors-kafka" />
+        <module name="flink-from-shangbaishuyao-wordCount" />
         <module name="flink-learning-connectors-mysql" />
         <module name="flink-learning-connectors-activemq" />
         <module name="flink-learning-from-zhisheng-sinks" />
