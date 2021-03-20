@@ -1,6 +1,6 @@
 package com.shangbaishuyao.window
 
-import com.atguigu.flink.source.SensorReader
+import com.shangbaishuyao.source.SensorReader
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor

@@ -1,6 +1,5 @@
 package com.shangbaishuyao.processFunction
 
-import com.atguigu.flink.source.SensorReader
 import com.shangbaishuyao.source.SensorReader
 import org.apache.flink.api.common.state.{ValueState, ValueStateDescriptor}
 import org.apache.flink.streaming.api.TimeCharacteristic
@@ -9,6 +8,11 @@ import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.util.Collector
 
 /**
+ * Desc:
+ * create by shangbaishuyao on 2021/3/20
+ * @Author: 上白书妖
+ * @Date: 14:26 2021/3/20
+ *
  * 监控每一个传感器，如果温度再1秒内连续上升输出报警信息
  * 详细业务：再1秒内，传感器记录的温度没有任何一条持平或者下降。则称为1秒内温度连续上升
  * 如果警告已经触发，下一次的警告触发器和当前已经触发的警告中温度无关

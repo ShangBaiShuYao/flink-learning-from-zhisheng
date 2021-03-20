@@ -1,6 +1,5 @@
 package com.shangbaishuyao.fransform
 
-import com.shangbaishuyao.source.FromCustomerSource.MyCustomerSource
 import com.shangbaishuyao.source.{MyCustomerSource, SensorReader}
 import org.apache.flink.api.java.tuple.Tuple
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment

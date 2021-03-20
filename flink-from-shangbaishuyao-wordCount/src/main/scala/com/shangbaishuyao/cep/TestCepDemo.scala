@@ -10,6 +10,11 @@ import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.windowing.time.Time
 
 /**
+ * Desc:
+ * create by shangbaishuyao on 2021/3/20
+ * @Author: 上白书妖
+ * @Date: 14:26 2021/3/20
+ *
  * 登录告警系统
  * 从一堆的登录日志从，匹配一个恶意登录的模式（如果一个用户连续失败三次，则是恶意登录），从而找到哪些用户名是用于恶意 登录
  */

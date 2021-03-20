@@ -1,12 +1,16 @@
 package com.shangbaishuyao.processFunction
 
-import com.atguigu.flink.source.FromCustomerSource.MyCustomerSource
-import com.atguigu.flink.source.SensorReader
+import com.shangbaishuyao.source.{MyCustomerSource, SensorReader}
 import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.apache.flink.streaming.api.scala.{OutputTag, StreamExecutionEnvironment}
 import org.apache.flink.util.Collector
 
 /**
+ * Desc:
+ * create by shangbaishuyao on 2021/3/20
+ * @Author: 上白书妖
+ * @Date: 14:27 2021/3/20
+ *
  * 业务：根据温度是否为零下温度还是零度以上，来输出侧流（零下温度） ,主流里面放零度以上的温度
  */
 object TestSideStream {
