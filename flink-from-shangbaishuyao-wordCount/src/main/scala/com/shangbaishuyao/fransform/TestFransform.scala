@@ -1,18 +1,20 @@
 package com.shangbaishuyao.fransform
 
-import com.atguigu.flink.source.FromCustomerSource.MyCustomerSource
-import com.atguigu.flink.source.SensorReader
+import com.shangbaishuyao.source.FromCustomerSource.MyCustomerSource
+import com.shangbaishuyao.source.SensorReader
 import org.apache.flink.api.java.tuple.Tuple
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
-
+/**
+ * Desc:
+ * create by shangbaishuyao on 2021/3/20
+ * @Author: 上白书妖
+ * @Date: 12:20 2021/3/20
+ */
 object TestFransform {
-
   def main(args: Array[String]): Unit = {
-
     val streamEnv: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
     streamEnv.setParallelism(1)
     import org.apache.flink.streaming.api.scala._
-
     val stream: DataStream[SensorReader] = streamEnv.addSource(new MyCustomerSource)
 
     //1、根据传感器数据的编号分组，计算气温最高的值 （max聚合算子）
@@ -44,12 +46,9 @@ object TestFransform {
     )
     //connect 没有真正汇合，如果真正意义上的汇合需要再次调用map或者flatmap
 
-
     //5、union算子可以真正汇合
     val stream5: DataStream[SensorReader] = highStream.union(lowStream)
     stream5.print()
-
-
     streamEnv.execute()
   }
 }

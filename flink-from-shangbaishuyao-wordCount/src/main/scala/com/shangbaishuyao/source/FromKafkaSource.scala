@@ -9,6 +9,11 @@ import org.apache.flink.streaming.util.serialization.KeyedDeserializationSchema
 import org.apache.kafka.common.serialization.StringDeserializer
 
 /**
+ * Desc:
+ * create by shangbaishuyao on 2021/3/20
+ * @Author: 上白书妖
+ * @Date: 12:20 2021/3/20
+ *
  * 从kafka中读取数据，当前的job作为kafka的消费者
  */
 object FromKafkaSource {
