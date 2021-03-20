@@ -1,6 +1,6 @@
 package com.shangbaishuyao.window
 
-import com.shangbaishuyao.source.SensorReader
+import com.atguigu.flink.source.SensorReader
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor
@@ -8,15 +8,12 @@ import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.watermark.Watermark
 import org.apache.flink.streaming.api.windowing.assigners.{SlidingEventTimeWindows, TumblingEventTimeWindows}
 import org.apache.flink.streaming.api.windowing.time.Time
-/**
- * Desc:
- * create by shangbaishuyao on 2021/3/20
- * @Author: 上白书妖
- * @Date: 13:21 2021/3/20
- */
+
 object TestWindowAndWaterMarks {
+
   //1574840003
   def main(args: Array[String]): Unit = {
+
     val streamEnv: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
     streamEnv.setParallelism(1) //默认情况下每个任务的并行度为1
     streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime) //使用EventTime作为时间语义

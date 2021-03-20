@@ -3,7 +3,7 @@ package com.shangbaishuyao.fransform
 import java.sql.{Connection, DriverManager}
 
 import com.shangbaishuyao.source.FromCustomerSource.MyCustomerSource
-import com.shangbaishuyao.source.SensorReader
+import com.shangbaishuyao.source.{MyCustomerSource, SensorReader}
 import org.apache.flink.api.common.functions.{MapFunction, RichMapFunction}
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
