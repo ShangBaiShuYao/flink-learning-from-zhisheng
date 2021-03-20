@@ -14,7 +14,7 @@ class HotItemWindowFunction extends WindowFunction[Long,(Long,Long),Long,TimeWin
   //apply这个方法是在窗口没有关闭后执行还是在窗口关闭后执行呢.所以这个方法在窗口关闭一关闭就开始执行了.
   //而且这个方法拿数据是从状态中拿数据. 关键是这里他执行拿到一个键的数据
   //如下所示: 这key是固定的. 这个key连的是一个迭代器. 所以只能拿到这一个键下的数据
-  //那既然如此的话,就无法在这里面做排序 , 以为只有一个键下的数据,我无法和别人进行比较
+  //那既然如此的话,就无法在这里面做排序 , 因为只有一个键下的数据,我无法和别人进行比较
   override def apply(key: Long, window: TimeWindow, input: Iterable[Long], out: Collector[(Long, Long)]): Unit = {
     //累加之后,将结果以二元组形式输出
     var itemId:Long=key //商品的id

@@ -36,25 +36,20 @@ object topNFindBug {
       props.setProperty("value.deserializer",classOf[StringDeserializer].getName)
       props.setProperty("group.id","consumer-group1")
       props.setProperty("auto.offset.reset","latest")
-
       val stream: DataStream[UserBehavior] = env.addSource(new FlinkKafkaConsumer[String](MyKafkaUtil.userBehaviorTopic, new SimpleStringSchema(), props).setStartFromEarliest())
         .map(line => {
           val arr: Array[String] = line.split(",")
           new UserBehavior(arr(0).trim.toLong, arr(1).trim.toLong, arr(2).trim.toInt, arr(3).trim, arr(4).trim.toLong)
         }).assignAscendingTimestamps(_.timestamp*1000) //指定EventTime具体是什么
-
       //3、
       val stream2: DataStream[(Long, Long)] = stream.filter(_.behavior.equals("pv"))
         .keyBy(_.itemId)
         .timeWindow(Time.hours(1), Time.minutes(5))
         .aggregate(new CountAggregate, new HotItemWindowFunction)  //聚合函数中，需要两个参数，第一个参数是做累加 ,第二个参数
-
-
       //4、把上一个窗口的结果数据做全量的排序计算
       stream2.timeWindowAll(Time.minutes(5))
         .process(new HotItemAllWindowFunction(3))
         .print()
-
       env.execute()
     }
 
@@ -63,11 +58,8 @@ object topNFindBug {
   //根据商品ID分组累加每个商品的访问次数
   class CountAggregate extends AggregateFunction[UserBehavior,Long,Long]{
     override def createAccumulator(): Long = {0}
-
     override def add(value: UserBehavior, accumulator: Long): Long = accumulator+1
-
     override def getResult(accumulator: Long): Long = accumulator
-
     override def merge(a: Long, b: Long): Long = a+b
   }
 
@@ -85,7 +77,6 @@ object topNFindBug {
     override def process(context: Context, elements: Iterable[(Long, Long)], out: Collector[String]): Unit = {
       //从Iterable 得到数据按照访问的次数降序排序
       val tuples: List[(Long, Long)] = elements.toList.sortBy(_._2)(Ordering.Long.reverse).take(topN)
-
       var sb :StringBuilder =new StringBuilder()
       sb.append(" 当前一个小时内的数据前 "+topN +"个  窗口时间："+ new Date(context.window.getEnd) +" \n")
       tuples.foreach(t=>{
@@ -93,7 +84,6 @@ object topNFindBug {
       })
       sb.append("----------------------------------\n")
       out.collect(sb.toString())
-
     }
   }
 }
