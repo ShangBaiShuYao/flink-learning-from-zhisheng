@@ -17,8 +17,6 @@ import org.apache.kafka.common.serialization.StringDeserializer
  * 从kafka中读取数据，当前的job作为kafka的消费者
  */
 object FromKafkaSource {
-
-
   def main(args: Array[String]): Unit = {
     val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
     env.setParallelism(1)
@@ -34,8 +32,7 @@ object FromKafkaSource {
     //设置kafka为数据源
 //    val stream: DataStream[String] = env.addSource(new FlinkKafkaConsumer011[String]("t_0615",new SimpleStringSchema(),props))
     //如果kafka中的数据是键值对
-      val stream: DataStream[(String, String)] = env.addSource(new FlinkKafkaConsumer011[(String,String)]("t_0615",new KeyedDeserializationSchema[(String,String)](){
-
+      val stream: DataStream[(String, String)] = env.addSource(new FlinkKafkaConsumer011[(String,String)]("gmall",new KeyedDeserializationSchema[(String,String)](){
       //把字节数组变成字符串封装成二元组返回
       override def deserialize(messageKey: Array[Byte], message: Array[Byte], topic: String, partition: Int, offset: Long) = {
         if(messageKey!=null && message!=null){
@@ -46,17 +43,14 @@ object FromKafkaSource {
           ("null","null")
         }
       }
-
       override def isEndOfStream(nextElement: (String, String)) = {
         false
       }
-
       //定义返回的类型
       override def getProducedType = {
         createTuple2TypeInformation(createTypeInformation[String],createTypeInformation[String])
       }
     },props))  //setStartFromEarliest 第一次取数据的策略
-
 
     //转换算子
 //    val result: DataStream[(String, Int)] = stream.flatMap(_.split(" ")).map((_,1)).keyBy(0).sum(1)
