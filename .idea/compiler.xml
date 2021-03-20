@@ -12,6 +12,7 @@
         <module name="flink-learning-connectors-hdfs" />
         <module name="flink-learning-from-zhisheng-source" />
         <module name="flink-learning-sql-common" />
+        <module name="UserBehaviorAnalysis" />
         <module name="flink-learning-connectors-flume" />
         <module name="flink-learning-connectors-kafka" />
         <module name="flink-from-shangbaishuyao-wordCount" />
