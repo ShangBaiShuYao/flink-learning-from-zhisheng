@@ -44,9 +44,7 @@ object StreamToCustomerTest {
       pst.setDouble(3,value.temperature)
       pst.setLong(4,value.timestamp)
       pst.setDouble(5,value.temperature)
-
       pst.executeUpdate()
-
     }
 
     override def close(): Unit = {
