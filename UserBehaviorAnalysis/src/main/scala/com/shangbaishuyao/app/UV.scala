@@ -1,13 +1,14 @@
 package com.shangbaishuyao.app
 
 import java.lang
-import org.apache.flink.streaming.api.scala.function._
 import java.text.SimpleDateFormat
 import java.util.Date
+
 import com.shangbaishuyao.bean.UserBehavior
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
+import org.apache.flink.streaming.api.scala.function.ProcessWindowFunction
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.api.windowing.triggers.{Trigger, TriggerResult}
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow
