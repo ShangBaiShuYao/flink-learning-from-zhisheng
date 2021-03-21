@@ -1,6 +1,7 @@
 package com.shangbaishuyao.app
 
 import java.lang
+import org.apache.flink.streaming.api.scala.function._
 import java.text.SimpleDateFormat
 import java.util.Date
 import com.shangbaishuyao.bean.UserBehavior
@@ -12,7 +13,6 @@ import org.apache.flink.streaming.api.windowing.triggers.{Trigger, TriggerResult
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.util.Collector
 import redis.clients.jedis.Jedis
-import org.apache.flink.streaming.api.scala.function.ProcessWindowFunction
 
 /**
  * Desc: 网站独立访客数（UV）的统计 <br/>
@@ -115,7 +115,7 @@ object UV {
       //接下来应该触发我们的窗口了. 就是定义我们触发窗口的函数
       //我们做的业务稍微复杂一下.我可以在触发这个窗口的函数里面做我们的布隆过滤.所以做布隆过滤的时候,处理的代码比较复杂一点.
       //就直接放大招process
-        .process(new UVByBoomResultProcess)
+        .process(new UVByBoomResultProcess())
         .print("main")
     //执行
     env.execute()
@@ -136,10 +136,10 @@ class MyBloomFilter(size:Int) extends Serializable{
     //累加的原因是: 我的用户id(userId)有多个字符.
     // 这是我随便设置的你也可以不用ASCII值,也可以用其他的值
     //我也可以拿每一个字符的hashCode乘以种子 .
-    var hash:Long =0
-    for (i<-0 to userId.length-1){//遍历当前我用户id中的每一个字符. to:表示包头不包尾,所以要减去1
-        hash +=seed*userId.charAt(i)
-    }
+//    var hash:Long =0
+//    for (i<-0 to userId.length-1){//遍历当前我用户id中的每一个字符. to:表示包头不包尾,所以要减去1
+//        hash +=seed*seed+userId.charAt(i)
+//    }
     //for循环之后才有真正的hash值. 所以for循环完成的就是根据我的用户id得到一个hash值.当然这个hash算法是我随便设置的一种算法
     //和二进制向量进行位运算
     //假如我的size是20. 这个20是20个byte. 我这20个byte需要将他变成二进制.所以我们需要移位运算
@@ -147,7 +147,7 @@ class MyBloomFilter(size:Int) extends Serializable{
     //为什么这里要减1呢? 因为是往左移动. 这样一移位.左边变就是用0来填充. 得到10000000.....一堆的0
     //但是我直接那10000000...和hash进行位运算的话,就不适合, 因为里面都是0.
     //所以我要减去1 .就变成 011111111... 为什么要这么一堆1呢? 就是要进行与运算我才能进行判断. 1和1进行与运算才能得到1
-    hash & ((1<<size) -1)
+    userId.hashCode & ((1<<size) -1) //调用java中自己本身的hashcode算法.hash值变大,做大散列原则
   }
 }
 
