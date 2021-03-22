@@ -12,6 +12,12 @@
     <artifactId>UserBehaviorAnalysis</artifactId>
 
     <dependencies>
+        <!--Flink CEP-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-cep-scala_${scala.binary.version}</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
         <!--redis用的包-->
         <dependency>
             <groupId>redis.clients</groupId>
