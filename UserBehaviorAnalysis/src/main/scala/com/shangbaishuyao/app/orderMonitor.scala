@@ -38,8 +38,8 @@ object orderMonitor {
     //设置时间语义为事件时间
     env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
     //读取数据转化为样例类
-//    val KeyedStream: KeyedStream[OrderEvent, Long] = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\OrderLog.csv")
-    val KeyedStream: KeyedStream[OrderEvent, Long] = env.socketTextStream("hadoop102",7777)
+    val KeyedStream: KeyedStream[OrderEvent, Long] = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\OrderLog.csv")
+//    val KeyedStream: KeyedStream[OrderEvent, Long] = env.socketTextStream("hadoop102",7777)
       .map(line => {
         val arr: Array[String] = line.split(",")
         OrderEvent(arr(0).trim.toLong, arr(1).trim, arr(2).trim, arr(3).trim.toLong)
