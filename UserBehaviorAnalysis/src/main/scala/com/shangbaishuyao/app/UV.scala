@@ -110,7 +110,7 @@ object UV {
       //接下来应该触发我们的窗口了. 就是定义我们触发窗口的函数
       //我们做的业务稍微复杂一下.我可以在触发这个窗口的函数里面做我们的布隆过滤.所以做布隆过滤的时候,处理的代码比较复杂一点.
       //就直接放大招process
-//        .process(new UVByBoomResultProcess())
+//        .process(new UVByBoomResultProcess)
 //        .print("main")
     //执行
     env.execute()

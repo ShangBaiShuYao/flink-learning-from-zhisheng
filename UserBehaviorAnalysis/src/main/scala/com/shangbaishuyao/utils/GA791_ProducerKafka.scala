@@ -15,10 +15,10 @@ import scala.io.BufferedSource
  * @Author: 上白书妖
  * @Date: 17:32 2021/3/20
  */
-object MyKafkaUtil {
+object GA791_ProducerKafka {
   val bootstraps:String="hadoop102:9092,hadoop103:9092,hadoop104:9092"
-  val userBehaviorTopic:String="t_ub" // kafka中存放用户行为数据的主题
-//  val vm = "vm";
+//  val userBehaviorTopic:String="t_ub" // kafka中存放用户行为数据的主题
+  val GA791 = "vm";
 
   /**
    * 把数据导入kafka
@@ -48,7 +48,7 @@ object MyKafkaUtil {
   def main(args: Array[String]): Unit = {
 //    while (true){
     //导入热门商品统计模块的数据
-    writeDataToKafka(userBehaviorTopic,
+    writeDataToKafka(GA791,
       "H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\vmware.log")
 //    }
   }

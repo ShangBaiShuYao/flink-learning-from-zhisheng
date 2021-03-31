@@ -33,8 +33,8 @@ object topNPage {
 //    env.readTextFile(getClass.getResource("").getPath)
     //83.149.9.216 - - 17/05/2015:10:05:03 +0000 GET /presentations/logstash-monitorama-2013/images/kibana-search.png
     //83.149.9.216 - - 17/05/2015:10:05:43 +0000 GET /presentations/logstash-monitorama-2013/images/kibana-dashboard3.png
-//    val stream : DataStream[pageViewEvent] = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\apache.log")
-    val stream : DataStream[pageViewEvent] = env.socketTextStream("hadoop102",7777)
+    val stream : DataStream[pageViewEvent] = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\apache.log")
+//    val stream : DataStream[pageViewEvent] = env.socketTextStream("hadoop102",7777)
       .map(line => {
       val arr: Array[String] = line.split(" ")
       val format: SimpleDateFormat = new SimpleDateFormat("dd/MM/yyyy:HH:mm:ss")
