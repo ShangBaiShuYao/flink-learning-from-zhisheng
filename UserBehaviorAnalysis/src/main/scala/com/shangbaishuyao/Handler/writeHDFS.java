@@ -9,7 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * Desc:
+ * Desc: 删除HDFS <br/>
  * create by shangbaishuyao on 2021/3/31
  * @Author: 上白书妖
  * @Date: 18:55 2021/3/31

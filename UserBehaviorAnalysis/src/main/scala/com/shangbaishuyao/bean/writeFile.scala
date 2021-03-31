@@ -2,10 +2,14 @@ package com.shangbaishuyao.bean
 
 import java.io.RandomAccessFile
 import java.nio.charset.Charset
-
 import scala.io.Source
 import scala.reflect.io.Path
-
+/**
+ * Desc: 写入文件 <br/>
+ * create by shangbaishuyao on 2021/3/31
+ * @Author: 上白书妖
+ * @Date: 19:23 2021/3/31
+ */
 class writeFile {
   object FileOpera {
     val file_path = "H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\hdfs.txt"; //生成文件数据路径
