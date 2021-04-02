@@ -1,0 +1,222 @@
+<!--
+    THIS EXAMPLE WAS DOWNLOADED FROM https://echarts.apache.org/examples/zh/editor.html?c=doc-example/getting-started
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<!--<script src="/js/echarts.js"></script>-->
+<!--<script src="/js/echarts.min.js"></script>-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script type="text/javascript"src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+
+<!--<script type="text/javascript" src="/static/assets/js/jquery-1.10.2.js"></script>-->
+<!--<link href="js/echarts.js" rel="stylesheet" />-->
+<!-- Uncomment this line if you want to dataTool extension
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/extension/dataTool.min.js"></script>
+-->
+<!-- Uncomment this line if you want to use gl extension
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
+-->
+<!-- Uncomment this line if you want to echarts-stat extension
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
+-->
+<!-- Uncomment this line if you want to use map
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/china.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/world.js"></script>
+-->
+<!-- Uncomment these two lines if you want to use bmap extension
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=<Your Key Here>"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/extension/bmap.min.js"></script>
+-->
+<div style="clear:both"></div><!--这个层很有用，必须要，否则可能不兼容。-->
+<div id="container" style="height: 100% ">
+    <script type="text/javascript">
+        <!--①折线图-->
+        var dom1 = document.getElementById("container");
+        var myChart1 = echarts.init(dom1);
+        var app = {};
+        var option1;
+
+        // option1 = {
+        //     title: {
+        //         text: '流量排名前十商品ID',
+        //         subtext: '纯属虚构',
+        //         left: 'center'
+        //     },
+        //     xAxis: {
+        //         type: 'category',
+        //         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun','A','B','C']
+        //     },
+        //     yAxis: {
+        //         type: 'value'
+        //     },
+        //     series: [{
+        //         data: [1, 2, 3, 4, 5, 6, 7,8,9,10],
+        //         type: 'line',
+        //         smooth: true
+        //     }]
+        // };
+        // if (option1 && typeof option1 === 'object') {
+        //     myChart1.setOption(option1);
+        // }
+
+        function loadTotal() {
+            $.ajax({
+                type: 'POST',
+                url: "queryActiveTotalData",
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    var len = 0;
+                    if (Boolean(data)) {
+                        for (i in data)
+                            len++;
+                    }
+                    var pid9 = JSON.stringify(data[len - len + 9].pid)
+                    var pid8 = JSON.stringify(data[len - len + 8].pid)
+                    var pid7 = JSON.stringify(data[len - len + 7].pid)
+                    var pid6 = JSON.stringify(data[len - len + 6].pid)
+                    var pid5 = JSON.stringify(data[len - len + 5].pid)
+                    var pid4 = JSON.stringify(data[len - len + 4].pid)
+                    var pid3 = JSON.stringify(data[len - len + 3].pid)
+                    var pid2 = JSON.stringify(data[len - len + 2].pid)
+                    var pid1 = JSON.stringify(data[len - len + 1].pid)
+                    var pid0 = JSON.stringify(data[len - len].pid)
+
+
+                    var number9 = JSON.stringify(data[len - len + 9].number)
+                    var number8 = JSON.stringify(data[len - len + 8].number)
+                    var number7 = JSON.stringify(data[len - len + 7].number)
+                    var number6 = JSON.stringify(data[len - len + 6].number)
+                    var number5 = JSON.stringify(data[len - len + 5].number)
+                    var number4 = JSON.stringify(data[len - len + 4].number)
+                    var number3 = JSON.stringify(data[len - len + 3].number)
+                    var number2 = JSON.stringify(data[len - len + 2].number)
+                    var number1 = JSON.stringify(data[len - len + 1].number)
+                    var number0 = JSON.stringify(data[len - len].number)
+
+
+                    myChart1.setOption({
+                        xAxis: {
+                            type: 'category',
+                            data: [pid9.slice(1, pid9.length - 1), pid8.slice(1, pid8.length - 1), pid7.slice(1, pid7.length - 1), pid6.slice(1, pid6.length - 1), pid5.slice(1, pid5.length - 1), pid4.slice(1, pid4.length - 1), pid3.slice(1, pid3.length - 1), pid2.slice(1, pid2.length - 1), pid1.slice(1, pid1.length - 1), pid0.slice(1, pid0.length - 1)]
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: [number9.slice(1, number9.length - 1), number8.slice(1, number8.length - 1), number7.slice(1, number7.length - 1), number6.slice(1, number6.length - 1), number5.slice(1, number5.length - 1), number4.slice(1, number4.length - 1), number3.slice(1, number3.length - 1), number2.slice(1, number2.length - 1), number1.slice(1, number1.length - 1), number0.slice(1, number0.length - 1)],
+                            type: 'line',
+                            smooth: true
+                        }]
+                    })
+                }
+            });
+        }
+        loadTotal()
+    </script>
+</div>
+<div id="pieChart" style="height: 100%">
+    <script type="text/javascript">
+        <!--②饼状图-->
+        var dom2 = document.getElementById("pieChart");
+        var myChart2 = echarts.init(dom2);
+        var app = {};
+        var option2;
+        // option2 = {
+        //     title: {
+        //         text: '某站点商品流量异常',
+        //         subtext: '纯属虚构',
+        //         left: 'center'
+        //     },
+        //     tooltip: {
+        //         trigger: 'item'
+        //     },
+        //     legend: {
+        //         orient: 'vertical',
+        //         left: 'left',
+        //     },
+        //     series: [
+        //         {
+        //             name: '访问来源',
+        //             type: 'pie',
+        //             radius: '50%',
+        //             data: [
+        //                 {value: 1048, name: '正常流量商品数量'},
+        //                 {value: 735, name: '流量过高商品数量'},
+        //                 {value: 580, name: '流量过低商品数量'},
+        //             ],
+        //             emphasis: {
+        //                 itemStyle: {
+        //                     shadowBlur: 10,
+        //                     shadowOffsetX: 0,
+        //                     shadowColor: 'rgba(0, 0, 0, 0.5)'
+        //                 }
+        //             }
+        //         }
+        //     ]
+        // };
+        function loadTotal1() {
+            $.ajax({
+                type: 'POST',
+                url: "queryTOP3",
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    // alert(data)
+                    // alert(JSON.stringify(data.top1))
+                    // alert(JSON.stringify(data.top2))
+                    // alert(JSON.stringify(data.top3))
+
+                    option2 = {
+                        title: {
+                            text: '某站点商品流量异常',
+                            subtext: '纯属虚构',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                        },
+                        series: [
+                            {
+                                name: '访问来源',
+                                type: 'pie',
+                                radius: '50%',
+                                data: [
+                                    {value: JSON.stringify(data.top1), name: '正常流量商品数量'},
+                                    {value: JSON.stringify(data.top2), name: '流量过高商品数量'},
+                                    {value: JSON.stringify(data.top3), name: '流量过低商品数量'},
+                                ],
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+
+                    if (option2 && typeof option2 === 'object') {
+                        myChart2.setOption(option2);
+                    }
+                }
+            });
+        }
+        loadTotal1()
+
+    </script>
+</div>
+</body>
+</html>

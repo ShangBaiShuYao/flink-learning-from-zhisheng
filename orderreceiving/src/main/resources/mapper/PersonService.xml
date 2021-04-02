@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shangbaishuyao.service.PersonService">
+  <resultMap id="BaseResultMap" type="com.shangbaishuyao.model.Person">
+    <!--@mbg.generated-->
+    <!--@Table person-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="pid" jdbcType="VARCHAR" property="pid" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, pid, `number`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from person
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from person
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.shangbaishuyao.model.Person" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into person (pid, `number`)
+    values (#{pid,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.shangbaishuyao.model.Person" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into person
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="number != null">
+        `number`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shangbaishuyao.model.Person">
+    <!--@mbg.generated-->
+    update person
+    <set>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        `number` = #{number,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shangbaishuyao.model.Person">
+    <!--@mbg.generated-->
+    update person
+    set pid = #{pid,jdbcType=VARCHAR},
+      `number` = #{number,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--#查询火爆商品, 即流量前七个的高峰-->
+  <select id="selectTop10" resultType="com.shangbaishuyao.bean.Top10">
+   select
+       person.pid , person.number
+   from
+        person
+   where
+		person.number >18
+   group by
+       person.pid
+   order by
+        person.number
+   desc
+        limit 10
+  </select>
+
+  <!--#商品访问次数在0-15次 表示该商品流量异常. 即商品有问题. 因为访问次数太少了. 要不是商品不好,就是页面做的不够吸引人-->
+  <select id="selectTop1" resultType="int">
+    SELECT count(*) from person WHERE number between 0 and  15
+  </select>
+
+  <!--#商品访问次数在15-20次,正式正常商品应该有的点击量-->
+  <select id="selectTop2" resultType="int">
+     SELECT count(*) from person WHERE number between 15 and 20
+  </select>
+
+  <!--#火爆商品-->
+  <select id="selectTop3" resultType="int">
+    SELECT count(*) from person WHERE number > 20
+  </select>
+
+
+</mapper>
