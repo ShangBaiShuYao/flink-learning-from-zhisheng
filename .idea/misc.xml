@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/flink-learning-from-zhisheng-source/pom.xml" />
         <option value="$PROJECT_DIR$/flink-learning-from-zhisheng-sql/flink-learning-sql-common/pom.xml" />
         <option value="$PROJECT_DIR$/flink-learning-from-zhisheng-sql/pom.xml" />
+        <option value="$PROJECT_DIR$/orderreceiving/pom.xml" />
       </list>
     </option>
   </component>
