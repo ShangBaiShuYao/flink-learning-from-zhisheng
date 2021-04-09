@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_HOME" value="/opt/module/rt_gmall/gmall0820" />
+    <!--记录日志的方式  打印到控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+    <!--记录日志的方式  保存到文件-->
+    <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 将某一个包下日志单独打印日志 , 这个是日志输出的级别-->
+    <logger name="com.shangbaishuyao.gmall.controller.LoggerController"
+            level="INFO" additivity="false">
+        <appender-ref ref="rollingFile" /><!--滚动生成文件,一天一个-->
+        <appender-ref ref="console" />
+    </logger>
+
+    <root level="error" additivity="false">
+        <appender-ref ref="console" />
+    </root>
+</configuration>
