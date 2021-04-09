@@ -19,6 +19,8 @@
         <module>flink-learning-from-zhisheng-sql</module>
         <module>flink-from-shangbaishuyao-wordCount</module>
         <module>UserBehaviorAnalysis</module>
+        <module>RTDW</module>
+        <module>RTDW</module>
     </modules>
 
     <properties>
