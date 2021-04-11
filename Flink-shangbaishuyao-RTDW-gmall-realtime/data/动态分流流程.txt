@@ -1,0 +1,58 @@
+启动相关的服务
+	-zk
+	-kafka
+	-maxwell
+	-hdfs
+	-hbase
+
+数据库配置表table_process
+	source_table 		type		sinkType 		sinkTable 				sinkColumn		pk  
+	base_trademark		insert		hbase		DIM_BASE_TRADEMARK			id,tm_name
+
+运行BaseDBApp
+	-从kafka的ods_base_db_m取数据
+	-转换结构 	 String ->Json
+	-数据清洗 	data为空的  长度<3的过滤掉
+	-*分流* 根据数据库中配置表，将维度数据放到侧输出流	事实数据放到主流
+		*open 刚进入的时候调用一次，以后周期性执行
+			读取MySQL中配置
+			将配置缓存到内存的Map集合
+			检查创建Phoenix表
+
+		*processElement
+			根据配置，将元素进行分流
+
+	-将侧输出流中的维度数据写到phoenix的维度表中
+		*open 		
+			初始化phoenix连接
+		*invoke
+			拼接upsertSQL并执行    注意：手动提交
+
+	-将主流的数据保存到kakfa中
+		*在MyKafkaUtil中提供新的获取FlinkKafkaProducer的方法,该方法在调用的时候，需要指定具体的序列方式
+			 public static <T> FlinkKafkaProducer<T> getKafkaSinkBySchema(KafkaSerializationSchema<T> kafkaSerializationSchema) {
+		        Properties props = new Properties();
+		        props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,KAFKA_SERVER);
+		        //设置生产数据的超时时间
+		        props.setProperty(ProducerConfig.TRANSACTION_TIMEOUT_CONFIG,15*60*1000+"");
+		        return new FlinkKafkaProducer<T>(DEFAULT_TOPIC, kafkaSerializationSchema, props, FlinkKafkaProducer.Semantic.EXACTLY_ONCE);
+		    }
+
+		*在程序中对数据进行序列化
+			FlinkKafkaProducer<JSONObject> kafkaSink = MyKafkaUtil.getKafkaSinkBySchema(
+	            new KafkaSerializationSchema<JSONObject>() {
+	                @Override
+	                public void open(SerializationSchema.InitializationContext context) throws Exception {
+	                    System.out.println("kafka序列化");
+	                }
+	                @Override
+	                public ProducerRecord<byte[], byte[]> serialize(JSONObject jsonObj, @Nullable Long timestamp) {
+	                    String sinkTopic = jsonObj.getString("sink_table");
+	                    JSONObject dataJsonObj = jsonObj.getJSONObject("data");
+	                    return new ProducerRecord<>(sinkTopic,dataJsonObj.toString().getBytes());
+	                }
+	            }
+	        );
+
+	    *kafkaDS.addSink(kafkaSink);
+

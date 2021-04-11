@@ -1,7 +1,7 @@
 package com.shangbaishuyao.gmall.realtime.bean;
 
 /**
- * Author: Felix
+ * Author: 上白书妖
  * Date: 2021/2/23
  * @Builder注解
  *      可以使用构造者方式创建对象，给属性赋值

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 /**
- * Author: Felix
+ * Author: 上白书妖
  * Date: 2021/2/20
  * Desc: 支付实体类
  */

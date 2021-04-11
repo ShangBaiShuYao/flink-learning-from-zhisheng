@@ -1,0 +1,49 @@
+---项目打包 、部署到服务器
+
+1.修改realtime项目中的并行度，并打jar包
+	-BaseLogApp 
+	-VisitorStatsApp 
+
+
+2.修改flink-conf.yml
+	taskmanager.memory.process.size: 1000m
+	taskmanager.numberOfTaskSlots: 5
+
+
+3.排查问题
+	-启动flink集群,不能访问webUI
+		查看日志，端口冲突  lsof -i:8081 
+
+	-集群启动之后，不能启动
+		bin/flink run -m hadoop102:8081 -c com.shangbaishuyao.gmall.realtime.app.dwd.BaseLogApp ./gmall000-realtime-1.0.jar
+
+	-phoenix驱动不识别，需要加Class.forName指定
+	-找不到hadoop和hbase等相关的jar
+		原因：NoClassDefoundError：这个错误编译期间不会报，运行期间才会包。原因是运行期间找不到这个类或无法加载，这个比较复杂。我的做法是把类所在jar包放在flink lib下重启集群就不会出现这个问题。
+
+		解决：
+			>在my.env环境变量中添加
+				export HADOOP_CLASSPATH=`hadoop classpath`
+
+			>在flink的lib目录下创建执行hbase的lib的软连接
+				ln -s /opt/module/hbase/lib/ ./
+
+4.启动BaseLog、VisitorStatsApp
+
+5.打包publisher 
+
+6.花生壳添加hadoop上的publisher地址映射	
+
+7.sugar修改空间映射
+
+独立分窗口启动
+bin/flink run -m hadoop202:8081 -c com.shangbaishuyao.gmall.realtime.app.dwd.BaseLogApp ./gmall0820-realtime.jar
+
+bin/flink run -m hadoop202:8081 -c com.shangbaishuyao.gmall.realtime.app.dws.VisitorStatsApp ./gmall0820-realtime.jar
+
+编写realtime.sh脚本
+echo "========BaseLogApp==============="
+/opt/module/flink-local/bin/flink run -m hadoop202:8081 -c com.shangbaishuyao.gmall.realtime.app.dwd.BaseLogApp /opt/module/flink-local/gmall0820-realtime.jar >/dev/null 2>&1  &
+
+echo "========VisitorStatsApp==============="
+/opt/module/flink-local/bin/flink run -m hadoop202:8081 -c com.shangbaishuyao.gmall.realtime.app.dws.VisitorStatsApp /opt/module/flink-local/gmall0820-realtime.jar >/dev/null 2>&1  &

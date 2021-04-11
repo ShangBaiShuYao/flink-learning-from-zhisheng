@@ -1,7 +1,7 @@
 package com.shangbaishuyao.gmall.realtime.common;
 
 /**
- * Author: Felix
+ * Author: 上白书妖
  * Date: 2021/2/2
  * Desc: 项目配置的常量类
  */

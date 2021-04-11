@@ -3,7 +3,7 @@ package com.shangbaishuyao.gmall.realtime.bean;
 import lombok.Data;
 
 /**
- * Author: Felix
+ * Author: 上白书妖
  * Date: 2021/2/1
  * Desc:  配置表对应的实体类
  */

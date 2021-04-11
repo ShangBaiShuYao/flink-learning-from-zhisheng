@@ -27,11 +27,11 @@
         <value>filesystem</value>
     </property>
 
+    <!--这两个配置是开启表空间的nameSpace,使其不是使用默认的库,即默认的nameSpace-->
     <property>
         <name>phoenix.schema.isNamespaceMappingEnabled</name>
         <value>true</value>
     </property>
-
     <property>
         <name>phoenix.schema.mapSystemTablesToNamespace</name>
         <value>true</value>

@@ -1,0 +1,294 @@
+0.实现方式
+	-使用SpringBoot开发数据服务接口
+	-使用的技术
+		Spring SpringMVC Mybatis
+
+	-对web项目进行了分层  Controller<-->Service<-->Mapper  面向接口编程、面向抽象编程不要面向具体
+		*表示层 Controller
+			和客户端打交道，接收用户的情况，将请求交给业务层处理，返回响应给客户端
+		*业务层	Service
+			处理具体的业务
+		*持久层	dao|mapper
+			和数据库打交道
+
+
+1.总成交金额
+	-组件
+		数字翻牌器
+
+	-请求地址
+		$API_HOST/api/sugar/gmv
+
+	-返回数据的格式
+		{
+		  "status": 0,
+		  "msg": "",
+		  "data": 1201076.1961842624
+		}
+
+	-执行SQL
+		select sum(order_amount) from product_stats_0820 where toYYYYMMDD(stt)=#{date}	
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2.按品牌统计销售排行
+	-组件
+		横向柱状图
+
+	-请求地址
+		$API_HOST/api/sugar/trademark?limit=5
+
+	-返回数据的格式
+		{
+		  "status": 0,
+		  "data": {
+		    "categories": ["苹果","三星","华为"],
+		    "series": [
+		      {
+		        "data": [
+		          9387,
+		          8095,
+		          8863
+		        ]
+		      }
+		    ]
+		  }
+		}
+
+	-执行SQL
+		select tm_id,tm_name,sum(order_amount) order_amount from product_stats_0820 where toYYYYMMDD(stt)=#{date} group by tm_id,tm_name having order_amount >0 order by order_amount desc limit #{limit}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.按品类统计销售排行
+	-组件
+		轮播饼图
+
+	-请求地址
+		$API_HOST/api/sugar/category3?limit=5
+
+	-返回数据的格式
+		{
+		  "status": 0,
+		  "data": [
+		    {
+		      "name": "PC",
+		      "value": 97
+		    },
+		    {
+		      "name": "iOS",
+		      "value": 50
+		    }
+		  ]
+		}
+
+	-执行SQL
+		select category3_id,category3_name,sum(order_amount) order_amount from product_stats_0820 where toYYYYMMDD(stt)=20210224 group by category3_id,category3_name having order_amount >0 order by order_amount desc limit 10;
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+4.SPU销售排行
+	-组件
+		轮播表格
+
+	-请求地址
+		$API_HOST/api/sugar/spu?limit=10
+
+	-返回数据的格式
+		{
+		  "status": 0,
+		  "data": {
+		    "columns": [
+		      {
+		        "name": "分组织",
+		        "id": "subsys"
+		      }
+		    ],
+		    "rows": [
+		      {
+		        "subsys": "北京总部"
+		      }
+		    ]
+		  }
+		}
+
+	-执行SQL
+		select spu_id,spu_name,sum(order_amount) order_amount,sum(order_ct) order_ct from product_stats_0820 where toYYYYMMDD(stt)=20210224 group by spu_id,spu_name having order_amount >0 order by order_amount desc limit 10;
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+5.按地区统计交易额
+	-组件
+		中国省份色彩
+
+	-请求地址
+		$API_HOST/api/sugar/province
+
+	-返回数据的格式
+		{
+		  "status": 0,
+		  "data": {
+		    "mapData": [
+		      {
+		        "name": "北京",
+		        "value": 7489
+		      }
+		    ]
+		  }
+		}
+	-执行SQL
+		select province_name,sum(order_amount) order_amount from province_stats_0820 where toYYYYMMDD(stt)=#{date} group by province_id,province_name
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+6.新老访客访问指标对比
+	-组件
+		表格
+
+	-请求地址
+		$API_HOST/api/sugar/visitor
+
+	-返回数据的格式
+		{
+		    "status": 0,
+		    "data": {
+		        "combineNum": 1,
+		        "columns": [
+		            {
+		                "name": "类别",
+		                "id": "type"
+		            },
+		            {
+		                "name": "新用户",
+		                "id": "new"
+		            },
+		            {
+		                "name": "老用户",
+		                "id": "old"
+		            }
+		        ],
+		        "rows": [
+		            {
+		                "type": "用户数",
+		                "new": 123,
+		                "old": 13
+		            },
+		            {
+		                "type": "总访问页面",
+		                "new": 123,
+		                "old": 145
+		            },
+		            {
+		                "type": "跳出率",
+		                "new": 123,
+		                "old": 145
+		            },
+		            {
+		                "type": "平均在线时长",
+		                "new": 123,
+		                "old": 145
+		            },
+		            {
+		                "type": "平均访问页面数",
+		                "new": 23,
+		                "old": 145
+		            }
+		        ]
+		    }
+		}
+
+
+	-执行SQL
+		select is_new,sum(uv_ct) uv_ct,sum(pv_ct) pv_ct,sum(sv_ct) sv_ct, sum(uj_ct) uj_ct,sum(dur_sum) dur_sum from visitor_stats_0820 where toYYYYMMDD(stt)=20210223 group by is_new
+	
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+7.访客分时统计排行
+	-组件
+		折线图
+
+	-请求地址
+		 $API_HOST/api/sugar/hr
+
+	-返回数据的格式
+		{
+		  "status": 0,
+		  "data": {
+		    "categories": [
+		      "00",
+		      "01",
+		      "02"
+		    ],
+		    "series": [
+		      {
+		        "name": "UV",
+		        "data": [
+		          2838,
+		          3872,
+		          1388
+		        ]
+		      },
+		      {
+		        "name": "PV",
+		        "data": [
+		          2838,
+		          3872,,
+		          1388
+		        ]
+		      },
+		      {
+		        "name": "新访客",
+		        "data": [
+		          2838,
+		          3872,,
+		          1388
+		        ]
+		      }
+		    ]
+		  }
+		}
+
+	-执行SQL
+		select 
+		   sum(if(is_new='1', visitor_stats_0820.uv_ct,0)) new_uv,
+		   toHour(stt) hr,
+		   sum(visitor_stats_0820.uv_ct) uv_ct, 
+		   sum(pv_ct) pv_ct, 
+		   sum(uj_ct) uj_ct  
+		from visitor_stats_0820 where toYYYYMMDD(stt)=20210224 group by toHour(stt) order by toHour(stt)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+8.热词字符云
+	-组件
+		3D词云
+
+	-请求地址
+		$API_HOST/api/sugar/keyword
+
+	-返回数据的格式
+		{
+		  "status": 0,
+		  "data": [
+		    {
+		      "name": "visualMap",
+		      "value": 22199
+		    },
+		    {
+		      "name": "brush",
+		      "value": 3
+		    }
+		  ]
+		}
+	-执行SQL
+		select 
+			keyword,
+			sum(
+				keyword_stats_0820.ct * 
+				multiIf(
+					source='SEARCH',10,source='ORDER',5,source='CART',2,source='CLICK',1,0
+				)
+			) ct
+		from 
+			keyword_stats_0820
+		where 
+			toYYYYMMDD(stt) = 20210301
+		group by 
+			keyword
+		order by 
+			ct;
+
+----------------------------------------------------

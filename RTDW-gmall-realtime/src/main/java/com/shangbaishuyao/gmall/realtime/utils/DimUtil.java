@@ -27,7 +27,6 @@ public class DimUtil {
             }
             whereSql += filedName + "='" + fieldValue + "'";
         }
-
         String sql = "select * from " + tableName + whereSql;
         System.out.println("查询维度的SQL:" + sql);
         List<JSONObject> dimList = PhoenixUtil.queryList(sql, JSONObject.class);
@@ -41,7 +40,6 @@ public class DimUtil {
         }
         return dimJsonObj;
     }
-
     //在做维度关联的时候，大部分场景都是通过id进行关联，所以提供一个方法，只需要将id的值作为参数传进来即可
     public static JSONObject getDimInfo(String tableName, String id) {
         return getDimInfo(tableName, Tuple2.of("id", id));
@@ -50,7 +48,6 @@ public class DimUtil {
     /*
         优化：从Phoenix中查询数据，加入了旁路缓存
              先从缓存查询，如果缓存没有查到数据，再到Phoenix查询，并将查询结果放到缓存中
-
         redis
             类型：    string
             Key:     dim:表名:值       例如：dim:DIM_BASE_TRADEMARK:10_xxx
@@ -61,14 +58,9 @@ public class DimUtil {
 
         redisKey= "dim:dim_base_trademark:"
         where id='13'  and tm_name='zz'
-
-
         dim:dim_base_trademark:13_zz ----->Json
-
         dim:dim_base_trademark:13_zz
     */
-
-
     public static JSONObject getDimInfo(String tableName, Tuple2<String, String>... cloNameAndValue) {
         //拼接查询条件
         String whereSql = " where ";
@@ -84,7 +76,6 @@ public class DimUtil {
             whereSql += filedName + "='" + fieldValue + "'";
             redisKey += fieldValue;
         }
-
         //从Redis中获取数据
         Jedis jedis = null;
         //维度数据的json字符串形式
@@ -100,7 +91,6 @@ public class DimUtil {
             e.printStackTrace();
             throw new RuntimeException("从redis中查询维度失败");
         }
-
         //判断是否从Redis中查询到了数据
         if (dimJsonStr != null && dimJsonStr.length() > 0) {
             dimJsonObj = JSON.parseObject(dimJsonStr);
@@ -120,15 +110,12 @@ public class DimUtil {
                 System.out.println("维度数据没有找到:" + sql);
             }
         }
-
         //关闭Jedis
         if (jedis != null) {
             jedis.close();
         }
-
         return dimJsonObj;
     }
-
     //根据key让Redis中的缓存失效
     public static void deleteCached(String tableName, String id) {
         String key = "dim:" + tableName.toLowerCase() + ":" + id;
@@ -143,13 +130,10 @@ public class DimUtil {
         }
     }
 
-
     public static void main(String[] args) {
         //System.out.println(PhoenixUtil.queryList("select * from DIM_BASE_TRADEMARK", JSONObject.class));
         //JSONObject dimInfo = DimUtil.getDimInfoNoCache("DIM_BASE_TRADEMARK", Tuple2.of("id", "14"));
-
         JSONObject dimInfo = DimUtil.getDimInfo("DIM_BASE_TRADEMARK", "14");
-
         System.out.println(dimInfo);
     }
 }
