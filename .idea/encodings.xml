@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/Flink-shangbaishuyao-RTDW-gmall-realtime/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Flink-shangbaishuyao-RTDW-gmall-realtime/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/RTDW-gmall-logger/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/RTDW-gmall-publisher/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/UserBehaviorAnalysis/src/main/java" charset="UTF-8" />

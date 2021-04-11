@@ -13,6 +13,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+        </dependency>
+        <dependency>
             <groupId>com.shangbaishuyao.flink</groupId>
             <artifactId>flink-learning-from-zhisheng-common</artifactId>
             <version>1.0-SNAPSHOT</version>
