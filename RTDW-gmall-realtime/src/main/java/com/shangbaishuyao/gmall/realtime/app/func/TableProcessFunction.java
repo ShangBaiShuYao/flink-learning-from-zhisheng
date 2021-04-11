@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Author: shangbaishuyao
+ * Author: 上白书妖
  * Date: 2021/2/1
  * Desc:  配置表处理函数
  */
@@ -157,6 +157,7 @@ public class TableProcessFunction extends ProcessFunction<JSONObject, JSONObject
     }
 
     //每过来一个元素，方法执行一次，主要任务是根据内存中配置表Map对当前进来的元素进行分流处理
+    //TODO 主要任务是对大量数据做分流处理
     @Override
     public void processElement(JSONObject jsonObj, Context ctx, Collector<JSONObject> out) throws Exception {
         //获取表名

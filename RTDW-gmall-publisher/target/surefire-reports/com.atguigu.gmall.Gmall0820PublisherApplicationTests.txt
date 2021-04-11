@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.atguigu.gmall.Gmall0820PublisherApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.442 s - in com.atguigu.gmall.Gmall0820PublisherApplicationTests

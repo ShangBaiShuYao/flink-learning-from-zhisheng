@@ -1,7 +1,5 @@
 package com.shangbaishuyao.gmall.realtime.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -9,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
- * Author: Felix
+ * Author: 上白书妖
  * Date: 2021/2/20
  * Desc:  日期转换的工具类
  *     SimpleDateFormat存在线程安全问题,底层调用 calendar.setTime(date);

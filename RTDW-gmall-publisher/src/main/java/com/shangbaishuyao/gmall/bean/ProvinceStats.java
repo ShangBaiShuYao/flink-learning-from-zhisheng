@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 /**
- * Author: Felix
+ * Author: 上白书妖
  * Date: 2021/2/27
  * Desc: 地区交易额统计实体类
  */

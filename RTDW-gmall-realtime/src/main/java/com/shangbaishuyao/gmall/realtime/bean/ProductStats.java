@@ -13,7 +13,6 @@ package com.shangbaishuyao.gmall.realtime.bean;
 
 import lombok.Builder;
 import lombok.Data;
-
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;

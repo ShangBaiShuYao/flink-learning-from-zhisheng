@@ -39,10 +39,4 @@ public class KeywordUtil {
         }
         return wordList;
     }
-
-    public static void main(String[] args) {
-        String text = "尚硅谷大数据数仓";
-        System.out.println(KeywordUtil.analyze(text));
-
-    }
 }

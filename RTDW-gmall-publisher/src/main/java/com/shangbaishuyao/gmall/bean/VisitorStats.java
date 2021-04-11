@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Author: Felix
+ * Author: 上白书妖
  * Date: 2021/2/27
  * Desc: 访客流量统计实体类
  */

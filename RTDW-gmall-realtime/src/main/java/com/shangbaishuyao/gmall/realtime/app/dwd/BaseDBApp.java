@@ -57,9 +57,7 @@ public class BaseDBApp {
         //TODO 4.对数据进行ETL   如果table为空 或者 data为空，或者长度<3  ，将这样的数据过滤掉
         SingleOutputStreamOperator<JSONObject> filteredDS = jsonObjDS.filter(
             jsonObj -> {
-                boolean flag = jsonObj.getString("table") != null
-                    && jsonObj.getJSONObject("data") != null
-                    && jsonObj.getString("data").length() > 3;
+                boolean flag = jsonObj.getString("table") != null && jsonObj.getJSONObject("data") != null && jsonObj.getString("data").length() > 3;
                 return flag;
             }
         );

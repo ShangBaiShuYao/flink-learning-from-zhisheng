@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Author: Felix
+ * Author: 上白书妖
  * Date: 2021/2/26
  * Desc:  商品主题统计的Mapper接口
  */

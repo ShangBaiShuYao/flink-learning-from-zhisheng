@@ -6,21 +6,20 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
 
-import javax.annotation.Nullable;
 import java.util.Properties;
 
 /**
- * Author: Felix
- * Date: 2021/1/30
- * Desc: 操作Kafka的工具类
+ * Desc: 操作Kafka的工具类 <br/>
+ * @Author: 上白书妖
+ * @Date: 14:54 2021/4/10
  */
 public class MyKafkaUtil {
     private static String KAFKA_SERVER = "hadoop202:9092,hadoop203:9092,hadoop204:9092";
     private static String DEFAULT_TOPIC = "DEFAULT_DATA";
 
 
+    //TODO FlinkKafkaSource
     //获取FlinkKafkaConsumer
     public static FlinkKafkaConsumer<String> getKafkaSource(String topic, String groupId) {
         //Kafka连接的一些属性配置
@@ -30,6 +29,7 @@ public class MyKafkaUtil {
         return new FlinkKafkaConsumer<String>(topic, new SimpleStringSchema(), props);
     }
 
+    //TODO FlinkKafkaSink
     //封装FlinkKafkaProducer
     public static FlinkKafkaProducer<String> getKafkaSink(String topic) {
         return new FlinkKafkaProducer<String>(KAFKA_SERVER, topic, new SimpleStringSchema());

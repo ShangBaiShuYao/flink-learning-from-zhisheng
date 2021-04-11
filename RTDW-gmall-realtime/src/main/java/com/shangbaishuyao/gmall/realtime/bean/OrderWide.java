@@ -7,7 +7,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.math.BigDecimal;
 
 /**
- * Author: Felix
+ * Author: 上白书妖
  * Date: 2021/2/5
  * Desc: 订单宽表实体类
  */
