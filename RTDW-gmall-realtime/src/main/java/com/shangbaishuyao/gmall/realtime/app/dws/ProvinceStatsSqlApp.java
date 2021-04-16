@@ -28,7 +28,7 @@ public class ProvinceStatsSqlApp {
         StateBackend fsStateBackend = new FsStateBackend(
                 "hdfs://hadoop202:8020/gmall/flink/checkpoint/ProductStatsApp");
         env.setStateBackend(fsStateBackend);
-        System.setProperty("HADOOP_USER_NAME","atguigu");
+        System.setProperty("HADOOP_USER_NAME","shangbaishuyao");
         */
         //1.4 创建Table环境
         EnvironmentSettings setting = EnvironmentSettings
@@ -68,7 +68,7 @@ public class ProvinceStatsSqlApp {
         //TODO 5.将流中的数据保存到ClickHouse
          provinceStatsDS.addSink(
             ClickHouseUtil.getJdbcSink(
-                "insert into  province_stats_0820  values(?,?,?,?,?,?,?,?,?,?)"
+                "insert into  province_stats  values(?,?,?,?,?,?,?,?,?,?)"
             )
         );
 

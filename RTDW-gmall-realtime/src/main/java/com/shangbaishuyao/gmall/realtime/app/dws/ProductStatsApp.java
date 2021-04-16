@@ -56,7 +56,7 @@ public class ProductStatsApp {
         StateBackend fsStateBackend = new FsStateBackend(
                 "hdfs://hadoop202:8020/gmall/flink/checkpoint/ProductStatsApp");
         env.setStateBackend(fsStateBackend);
-        System.setProperty("HADOOP_USER_NAME","atguigu");
+        System.setProperty("HADOOP_USER_NAME","shangbaishuyao");
         */
 
         //TODO 2.从Kafka中获取数据流
@@ -415,7 +415,7 @@ public class ProductStatsApp {
         //TODO 10.将聚合后的流数据写到ClickHouse中
         productStatsWithCategoryDS.addSink(
             ClickHouseUtil
-                .<ProductStats>getJdbcSink("insert into product_stats_0820 values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                .<ProductStats>getJdbcSink("insert into product_stats values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                 ));
 
         //TODO 11.将统计的结果写回到kafka的dws层

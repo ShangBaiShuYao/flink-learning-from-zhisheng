@@ -30,7 +30,7 @@ public class KeywordStatsApp {
         StateBackend fsStateBackend = new FsStateBackend(
                 "hdfs://hadoop202:8020/gmall/flink/checkpoint/ProductStatsApp");
         env.setStateBackend(fsStateBackend);
-        System.setProperty("HADOOP_USER_NAME","atguigu");
+        System.setProperty("HADOOP_USER_NAME","shangbaishuyao");
         */
         //1.4 创建Table环境
         EnvironmentSettings setting = EnvironmentSettings
@@ -84,7 +84,7 @@ public class KeywordStatsApp {
 
         //TODO 8.写入到ClickHouse
         keywordStatsDS.addSink(
-            ClickHouseUtil.getJdbcSink("insert into keyword_stats_0820(keyword,ct,source,stt,edt,ts) values(?,?,?,?,?,?)")
+            ClickHouseUtil.getJdbcSink("insert into keyword_stats(keyword,ct,source,stt,edt,ts) values(?,?,?,?,?,?)")
         );
 
         env.execute();

@@ -29,7 +29,7 @@ public class KeywordStats4ProductApp {
         StateBackend fsStateBackend = new FsStateBackend(
                 "hdfs://hadoop202:8020/gmall/flink/checkpoint/ProvinceStatsSqlApp");
         env.setStateBackend(fsStateBackend);
-        System.setProperty("HADOOP_USER_NAME","atguigu");
+        System.setProperty("HADOOP_USER_NAME","shangbaishuyao");
         */
         //TODO 1.定义Table流环境
         EnvironmentSettings settings = EnvironmentSettings
@@ -70,7 +70,7 @@ public class KeywordStats4ProductApp {
         //TODO 8.写入到ClickHouse
         keywordStatsProductDataStream.addSink(
             ClickHouseUtil.<KeywordStats>getJdbcSink(
-                "insert into keyword_stats_0820(keyword,ct,source,stt,edt,ts)  " +
+                "insert into keyword_stats(keyword,ct,source,stt,edt,ts)  " +
                     "values(?,?,?,?,?,?)"));
 
         env.execute();

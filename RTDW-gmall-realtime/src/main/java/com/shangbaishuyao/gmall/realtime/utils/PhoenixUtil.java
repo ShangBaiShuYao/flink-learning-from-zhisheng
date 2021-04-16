@@ -15,7 +15,6 @@ import java.util.List;
  */
 public class PhoenixUtil {
     private static Connection conn = null;
-
     public static void init(){
         try {
             //注册驱动
@@ -79,6 +78,7 @@ public class PhoenixUtil {
         return resultList;
     }
 
+    //测试
     public static void main(String[] args) {
         System.out.println(queryList("select * from DIM_BASE_TRADEMARK", JSONObject.class));
     }

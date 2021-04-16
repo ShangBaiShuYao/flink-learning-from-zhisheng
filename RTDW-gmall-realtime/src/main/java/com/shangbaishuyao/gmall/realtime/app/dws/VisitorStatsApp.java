@@ -62,7 +62,7 @@ public class VisitorStatsApp {
         StateBackend fsStateBackend = new FsStateBackend(
                 "hdfs://hadoop202:8020/gmall/flink/checkpoint/VisitorStatsApp");
         env.setStateBackend(fsStateBackend);
-        System.setProperty("HADOOP_USER_NAME","atguigu");
+        System.setProperty("HADOOP_USER_NAME","shangbaishuyao");
         */
 
         //TODO 2.从kafka主题中读取数据
@@ -266,7 +266,7 @@ public class VisitorStatsApp {
 
         //TODO 9.向Clickhouse中插入数据
         reduceDS.addSink(
-            ClickHouseUtil.getJdbcSink("insert into visitor_stats_0820 values(?,?,?,?,?,?,?,?,?,?,?,?)")
+            ClickHouseUtil.getJdbcSink("insert into visitor_stats values(?,?,?,?,?,?,?,?,?,?,?,?)")
         );
 
         env.execute();

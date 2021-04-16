@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * Author: 上白书妖
  * Date: 2021/2/5
- * Desc: 用于维度查询的工具类  底层调用的是PhoenixUtil
+ * Desc: 用于维度查询的工具类 ,  底层调用的是PhoenixUtil , 再进一步封装 <br/>
  * select * from dim_base_trademark where id=10 and name=zs;
  */
 public class DimUtil {
-    //从Phoenix中查询数据，没有使用缓存
+    //从Phoenix中查询数据，没有使用缓存                             查询字段的名称  查询字段的值
     public static JSONObject getDimInfoNoCache(String tableName, Tuple2<String, String>... cloNameAndValue) {
         //拼接查询条件
         String whereSql = " where ";
@@ -45,8 +45,9 @@ public class DimUtil {
         return getDimInfo(tableName, Tuple2.of("id", id));
     }
 
+
     /*
-        优化：从Phoenix中查询数据，加入了旁路缓存
+        TODO 优化：从Phoenix中查询数据，<p> 加入了旁路缓存 </p>
              先从缓存查询，如果缓存没有查到数据，再到Phoenix查询，并将查询结果放到缓存中
         redis
             类型：    string
@@ -60,6 +61,17 @@ public class DimUtil {
         where id='13'  and tm_name='zz'
         dim:dim_base_trademark:13_zz ----->Json
         dim:dim_base_trademark:13_zz
+
+        旁路缓存模式 <br/>
+        1)这种缓存策略有几个注意点
+            缓存要设过期时间，不然冷数据会常驻缓存浪费资源。
+            要考虑维度数据是否会发生变化，如果发生变化要主动清除缓存。
+        2)缓存的选型
+            一般两种：堆缓存或者独立缓存服务(redis，memcache)，
+            堆缓存，从性能角度看更好，毕竟访问数据路径更短，减少过程消耗。但是管理性差，其他进程无法维护缓存中的数据。
+            独立缓存服务（redis,memcache）本事性能也不错，不过会有创建连接、网络IO等消耗。但是考虑到数据如果会发生变化，
+            那还是独立缓存服务管理性更强，而且如果数据量特别大，独立缓存更容易扩展。
+            因为咱们的维度数据都是可变数据，所以这里还是采用Redis管理缓存。
     */
     public static JSONObject getDimInfo(String tableName, Tuple2<String, String>... cloNameAndValue) {
         //拼接查询条件
