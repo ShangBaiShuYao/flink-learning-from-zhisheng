@@ -13,10 +13,11 @@ import java.util.Date;
  *     SimpleDateFormat存在线程安全问题,底层调用 calendar.setTime(date);
  *     解决：在JDK8，提供了DateTimeFormatter替代SimpleDateFormat
  *
+ *SimpleDateFormat有线程安全问题.
+ * 什么叫线程安全: 多个线程共享一个变量.对变量做修改操作.会出现线程安全问题. 
  */
 public class DateTimeUtil {
     public static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public static void main(String[] args) {
         System.out.println(ZoneId.systemDefault());
     }

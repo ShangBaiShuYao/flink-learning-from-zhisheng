@@ -21,22 +21,23 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Desc: 准备用户行为日志的DWD层 <br/>
- * create by shangbaishuyao on 2021/4/9
  * @Author: 上白书妖
  * @Date: 16:53 2021/4/9
  */
 public class BaseLog_ODS_SideOutput_DWD {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(BaseLog_ODS_SideOutput_DWD.class);
     //定义kafka主题
     private static final String TOPIC_START = "dwd_start_log";
     private static final String TOPIC_DISPLAY = "dwd_display_log";
     private static final String TOPIC_PAGE = "dwd_page_log";
-
     public static void main(String[] args) throws Exception{
+
         //TODO 1.准备环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         //设置并行度(并行度如何设置合适? kafka分区数,因为从kafka读数据.并行度小于kafka分区数,那kafka分区没意义. 多了,就浪费了)
@@ -211,6 +212,8 @@ public class BaseLog_ODS_SideOutput_DWD {
                             //有数据就是启动日志,启动日志输出到启动的侧输出流.
                             context.output(startOutPutTag, LogdataString);
                         } else {
+                            //TODO ①如果不是曝光日志,则是页面日志,页面日志输出到主流
+                            collector.collect(LogdataString);
                             //如果不是启动日志,获取曝光日志标记
                             //因为里面的json对象是按照数组形式放置的. "display"[{...},{...}]
                             JSONArray displayLogData = jsonObject.getJSONArray("display");
@@ -232,10 +235,11 @@ public class BaseLog_ODS_SideOutput_DWD {
                                     //侧输出流的输出
                                     context.output(displayOutPutTag, displayJSONObject.toString());
                                 }
-                            } else {
+                            } /*else { //TODO 这是一个bug, 你应该在获取曝光日志之前直接将页面日志先输出过去.不然我们在后面分析UV的时候会出现没有数据的现象.因为曝光日志也携带页面
+                                       //TODO 所以这一处应该放在①处
                                 //不是曝光日志,则是页面日志,页面日志输出到主流
                                 collector.collect(LogdataString);
-                            }
+                            }*/
                         }
                     }
                 }

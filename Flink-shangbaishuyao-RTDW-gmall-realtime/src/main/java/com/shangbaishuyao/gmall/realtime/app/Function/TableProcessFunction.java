@@ -1,6 +1,7 @@
 package com.shangbaishuyao.gmall.realtime.app.Function;
 
 import com.alibaba.fastjson.JSONObject;
+import com.shangbaishuyao.gmall.realtime.app.DWD.BaseDB_ODS_SideOutput_DWDorHbase;
 import com.shangbaishuyao.gmall.realtime.bean.TableProcess;
 import com.shangbaishuyao.gmall.realtime.common.GmallConfig;
 import com.shangbaishuyao.gmall.realtime.utils.MySQLUtil;
@@ -23,6 +24,12 @@ import java.util.*;
  * @Date: 0:05 2021/4/11
  */
 public class TableProcessFunction extends ProcessFunction<JSONObject,JSONObject> {
+    //TODO 使用log打印日志需要序列化. 什么时候会报没有序列化的错误呢?  @Slf4j注解也是.
+    //如spark有Driver和Executor.  算子在executor执行. 算子之外的代码在Driver端定义. 如果算子在执行的过程中,用到了Driver端定义的变量.
+    //这个时候就要求这个变量是可序列化的.  Flink里面没有Driver和Executor. 但是有类似概念.叫JobManager和TaskManager
+    //任务在执行的时候是在TaskManager上运行的. JobManager也是做一些初始化操作.
+    //所以下面这个声明我们在JobManager上,真正做初始化是在TaskManager上做.
+    private static org.slf4j.Logger log = null;
 
     //侧输出流标记
     private final OutputTag<JSONObject> hbaseOutputTag;
@@ -65,6 +72,7 @@ public class TableProcessFunction extends ProcessFunction<JSONObject,JSONObject>
     //TODO processElement 大量数据过来分析
     @Override
     public void processElement(JSONObject value, Context context, Collector<JSONObject> out) throws Exception {
+        log = org.slf4j.LoggerFactory.getLogger(BaseDB_ODS_SideOutput_DWDorHbase.class);
         //获取表名
         String table = value.getString("table");
         //获取操作类型

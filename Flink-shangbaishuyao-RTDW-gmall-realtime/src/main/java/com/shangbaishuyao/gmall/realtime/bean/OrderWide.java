@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 /**
  * Author: 上白书妖
  * Date: 2021/2/5
- * Desc: 订单宽表实体类
+ * Desc: 订单宽表实体类 (是订单表和订单明细表按照订单id得到join的产物)
  */
 @Data
 @AllArgsConstructor
@@ -55,12 +55,14 @@ public class OrderWide {
     String tm_name;
     String category3_name;
 
+    //提供了两个构造方法. 订单和订单明细. 直接将这个两个拿过来.
+    //即我需要创建订单宽表就需要这两个参数.
     public OrderWide(OrderInfo orderInfo, OrderDetail orderDetail){
         mergeOrderInfo(orderInfo);
         mergeOrderDetail(orderDetail);
-
     }
 
+    //这个主要是给订单相关属性赋值
     public void  mergeOrderInfo(OrderInfo orderInfo  )  {
         if (orderInfo != null) {
             this.order_id = orderInfo.id;
@@ -76,7 +78,7 @@ public class OrderWide {
             this.user_id = orderInfo.user_id;
         }
     }
-
+    //这个主要给订单明细相关属性赋值
     public void mergeOrderDetail(OrderDetail orderDetail  )  {
         if (orderDetail != null) {
             this.detail_id = orderDetail.id;
@@ -90,7 +92,9 @@ public class OrderWide {
         }
     }
 
+    //如果你创建订单宽表的时候,传的不是订单和订单明细.而是传的其他的订单宽表.那这个时候这个方法就是将其他的订单宽表的值给我赋过来的方法.
     public void mergeOtherOrderWide(OrderWide otherOrderWide){
+        //TODO ObjectUtils.firstNonNull 这个工具类其实就是,你不等于空,我给你赋值过来.如果你为空,我就直接附一个空值.
         this.order_status = ObjectUtils.firstNonNull( this.order_status ,otherOrderWide.order_status);
         this.create_time =  ObjectUtils.firstNonNull(this.create_time,otherOrderWide.create_time);
         this.create_date =  ObjectUtils.firstNonNull(this.create_date,otherOrderWide.create_date);

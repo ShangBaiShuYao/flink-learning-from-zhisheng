@@ -22,7 +22,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import javax.annotation.Nullable;
 
 /**
- * Desc: 准备业务数据的DWD层 <br/>
+ * Desc: 准备业务数据的DWD层,动态分流 <br/>
  * @Author: 上白书妖
  * @Date: 21:39 2021/4/10
  */
@@ -54,7 +54,7 @@ public class BaseDB_ODS_SideOutput_DWDorHbase {
         //TODO 3.对DS中数据进行结构的转换      String-->Json
         //这种方式可以,这种方式如果里面有泛型,会出现泛型的擦除
 //        SingleOutputStreamOperator<JSONObject> jsonObjectDataStream = kafkasourceDataStream.map(line -> JSON.parseObject(line));
-        //这种String转为JSON的方式也可以
+        //TODO 这种String转为JSON的方式也可以
         SingleOutputStreamOperator<JSONObject> jsonObjectDataStream = kafkasourceDataStream.map(JSON::parseObject);
         //TODO 4.对数据进行ETL   如果table为空 或者 data为空，或者长度<3,将这样的数据过滤掉
         SingleOutputStreamOperator<JSONObject> filterDataStream = jsonObjectDataStream.filter(

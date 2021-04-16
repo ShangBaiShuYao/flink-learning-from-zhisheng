@@ -64,6 +64,7 @@ public class PaymentWide {
         if (paymentInfo != null) {
             try {
                 BeanUtils.copyProperties(this,paymentInfo);
+                //属性名不一致的额外处理一下
                 payment_create_time=paymentInfo.create_time;
                 payment_id = paymentInfo.id;
             } catch (IllegalAccessException e) {
