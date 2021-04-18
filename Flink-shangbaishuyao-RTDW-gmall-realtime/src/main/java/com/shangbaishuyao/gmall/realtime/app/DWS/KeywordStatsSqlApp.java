@@ -16,7 +16,7 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
  * Date: 2021/2/26
  * Desc: dWS层 搜索关键字
  */
-public class KeywordStatsApp {
+public class KeywordStatsSqlApp {
     public static void main(String[] args) throws Exception {
         //TODO 1.基本环境准备
         //1.1 创建Flink流式处理环境
