@@ -22,7 +22,6 @@ public class VisitorStatsServiceImpl implements VisitorStatsService {
     public List<VisitorStats> getVisitorStatsByNewFlag(int date) {
         return visitorStatsMapper.selectVisitorStatsByNewFlag(date);
     }
-
     @Override
     public List<VisitorStats> getVisitorStatsByHr(int date) {
         return visitorStatsMapper.selectVisitorStatsByHr(date);
