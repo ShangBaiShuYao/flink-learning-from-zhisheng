@@ -1,6 +1,6 @@
-package com.shangbaishuyao.gmall.realtime.app.dws;
+package com.shangbaishuyao.gmall.realtime.app.DWS;
 
-import com.shangbaishuyao.gmall.realtime.app.func.KeywordUDTF;
+import com.shangbaishuyao.gmall.realtime.app.Function.KeywordUDTF;
 import com.shangbaishuyao.gmall.realtime.bean.KeywordStats;
 import com.shangbaishuyao.gmall.realtime.common.GmallConstant;
 import com.shangbaishuyao.gmall.realtime.utils.ClickHouseUtil;
@@ -76,17 +76,13 @@ public class KeywordStatsApp {
                 "UNIX_TIMESTAMP()*1000 ts from " + keywordTable +
                 " group by TUMBLE(rowtime, INTERVAL '10' SECOND),keyword"
         );
-
         //TODO 7.转换为流
         DataStream<KeywordStats> keywordStatsDS = tableEnv.toAppendStream(reduceTable, KeywordStats.class);
-
-        keywordStatsDS.print(">>>>");
 
         //TODO 8.写入到ClickHouse
         keywordStatsDS.addSink(
             ClickHouseUtil.getJdbcSink("insert into keyword_stats(keyword,ct,source,stt,edt,ts) values(?,?,?,?,?,?)")
         );
-
         env.execute();
     }
 }

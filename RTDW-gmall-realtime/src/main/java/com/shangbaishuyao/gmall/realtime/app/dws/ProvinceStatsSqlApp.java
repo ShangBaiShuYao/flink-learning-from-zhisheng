@@ -71,7 +71,6 @@ public class ProvinceStatsSqlApp {
                 "insert into  province_stats  values(?,?,?,?,?,?,?,?,?,?)"
             )
         );
-
         env.execute();
     }
 }

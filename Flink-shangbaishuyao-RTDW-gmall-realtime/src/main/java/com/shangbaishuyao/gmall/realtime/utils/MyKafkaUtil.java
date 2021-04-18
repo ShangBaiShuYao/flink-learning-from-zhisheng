@@ -69,6 +69,7 @@ public class MyKafkaUtil {
         return new FlinkKafkaProducer<T>(DEFAULT_TOPIC, kafkaSerializationSchema, props, FlinkKafkaProducer.Semantic.EXACTLY_ONCE);
     }
 
+    //Flink SQL kafka DDL
     //拼接Kafka相关属性到DDL:创建表,修改表结构.
     public static String getKafkaDDL(String topic,String groupId){
         String ddl="'connector' = 'kafka', " +

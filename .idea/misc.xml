@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/RTDW-gmall-logger/pom.xml" />
         <option value="$PROJECT_DIR$/RTDW-gmall-publisher/pom.xml" />
         <option value="$PROJECT_DIR$/Flink-shangbaishuyao-RTDW-gmall-realtime/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-clickhouse-sink-master/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

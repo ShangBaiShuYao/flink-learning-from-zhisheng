@@ -70,10 +70,8 @@ public class KeywordStats4ProductApp {
         //TODO 8.写入到ClickHouse
         keywordStatsProductDataStream.addSink(
             ClickHouseUtil.<KeywordStats>getJdbcSink(
-                "insert into keyword_stats(keyword,ct,source,stt,edt,ts)  " +
-                    "values(?,?,?,?,?,?)"));
+                "insert into keyword_stats(keyword,ct,source,stt,edt,ts) values(?,?,?,?,?,?)"));
 
         env.execute();
-
     }
 }

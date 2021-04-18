@@ -262,8 +262,6 @@ public class VisitorStatsApp {
             }
         );
 
-        //reduceDS.print(">>>>>");
-
         //TODO 9.向Clickhouse中插入数据
         reduceDS.addSink(
             ClickHouseUtil.getJdbcSink("insert into visitor_stats values(?,?,?,?,?,?,?,?,?,?,?,?)")
