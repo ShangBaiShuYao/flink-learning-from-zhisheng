@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/flink-1.12.0-Demo/flink-1.12.0-Demo.iml" filepath="$PROJECT_DIR$/flink-1.12.0-Demo/flink-1.12.0-Demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-clickhouse-sink/flink-clickhouse-sink.iml" filepath="$PROJECT_DIR$/flink-clickhouse-sink/flink-clickhouse-sink.iml" />
       <module fileurl="file://$PROJECT_DIR$/RTDW-gmall-realtime/gmall0820-realtime.iml" filepath="$PROJECT_DIR$/RTDW-gmall-realtime/gmall0820-realtime.iml" />
     </modules>
