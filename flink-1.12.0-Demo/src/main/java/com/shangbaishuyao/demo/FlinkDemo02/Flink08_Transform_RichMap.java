@@ -5,7 +5,11 @@ import com.shangbaishuyao.demo.bean.WaterSensor;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
+/**
+ * Author: shangbaishuyao
+ * Date: 16:21 2021/4/22
+ * Desc:
+ */
 public class Flink08_Transform_RichMap {
     public static void main(String[] args) throws Exception {
         //1.获取执行环境
