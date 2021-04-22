@@ -15,7 +15,7 @@ import java.time.Duration;
 /**
  * Author: shangbaishuyao
  * Date: 22:55 2021/4/22
- * Desc:
+ * Desc: 自定义WatermarkStrategy(水位线策略) waterMark传递
  */
 public class Flink07_Window_EventTimeTumbling_WaterMarkTrans {
     public static void main(String[] args) throws Exception {

@@ -16,7 +16,7 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 /**
  * Author: shangbaishuyao
  * Date: 22:55 2021/4/22
- * Desc:
+ * Desc: 自定义WatermarkStrategy(水位线策略) 间歇性
  */
 public class Flink06_Window_EventTimeTumbling_CustomerPunt {
     public static void main(String[] args) throws Exception {

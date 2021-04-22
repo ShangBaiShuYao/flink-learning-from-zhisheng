@@ -16,7 +16,9 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 /**
  * Author: shangbaishuyao
  * Date: 22:55 2021/4/22
- * Desc:
+ * Desc: 自定义WatermarkStrategy(水位线策略)  周期性
+ *
+ * 有2种风格的WaterMark生产方式: periodic(周期性) and punctuated(间歇性).都需要继承接口: WatermarkGenerator
  */
 public class Flink05_Window_EventTimeTumbling_CustomerPeriod {
     public static void main(String[] args) throws Exception {
@@ -33,6 +35,7 @@ public class Flink05_Window_EventTimeTumbling_CustomerPeriod {
         WatermarkStrategy<WaterSensor> waterSensorWatermarkStrategy = new WatermarkStrategy<WaterSensor>() {
             @Override
             public WatermarkGenerator<WaterSensor> createWatermarkGenerator(WatermarkGeneratorSupplier.Context context) {
+                //自定义周期性的Watermark生成器
                 return new MyPeriod(2000L);
             }
         }.withTimestampAssigner(new SerializableTimestampAssigner<WaterSensor>() {
