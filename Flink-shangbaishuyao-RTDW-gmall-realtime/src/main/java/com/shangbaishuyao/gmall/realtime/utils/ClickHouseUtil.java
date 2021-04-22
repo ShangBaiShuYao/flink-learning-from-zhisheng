@@ -42,16 +42,16 @@ public class ClickHouseUtil {
         SinkFunction<T> sinkFunction = JdbcSink.<T>sink(
             //要执行的SQL语句
             sql,
-            //执行写入操作   就是将当前流中的对象属性赋值给SQL的占位符 insert into visitor_stats_0820 values(?,?,?,?,?,?,?,?,?,?,?,?)
+            //执行写入操作   就是将当前流中的对象属性赋值给SQL的占位符 insert into visitor_stats values(?,?,?,?,?,?,?,?,?,?,?,?)
             new JdbcStatementBuilder<T>() {
                 //obj  就是流中的一条数据对象
                 //我要想实现通用型的话,这个当前流的类型就不能固定,只能使用泛型.T. 可以用反射拿到属性.
                 @Override
                 public void accept(PreparedStatement ps, T obj) throws SQLException {
-                    //insert into visitor_stats_0820 values(?,?,?,?,?,?,?,?,?,?,?,?)
+                    //insert into visitor_stats values(?,?,?,?,?,?,?,?,?,?,?,?)
                     //获取当前类中  所有的属性
                     Field[] fields = obj.getClass().getDeclaredFields();//这个可以获取私有的.
-                    //跳过的属性计数    insert into visitor_stats_0820 values(?,?,?,?,跳过,?,?,?,?,?,?,?)
+                    //跳过的属性计数    insert into visitor_stats values(?,?,?,?,跳过,?,?,?,?,?,?,?)
                     int skipOffset = 0;
 
                     for (int i = 0; i < fields.length; i++) {
