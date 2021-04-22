@@ -19,7 +19,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  * 3.提交参数
  * 4.默认配置信息
  */
-public class Flink_WordCount_Unbounded {
+public class Flink_WordCount_UnBounded {
     public static void main(String[] args) throws Exception {
         //1.获取执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
