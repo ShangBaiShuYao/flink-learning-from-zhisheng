@@ -22,6 +22,7 @@ public class FlinkSQL03_Source_File {
         //1.获取执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
+        //1.创建表的执行环境
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
         //2.使用Connect方式读取文本数据
         tableEnv.connect(new FileSystem().path("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\sensor.txt"))

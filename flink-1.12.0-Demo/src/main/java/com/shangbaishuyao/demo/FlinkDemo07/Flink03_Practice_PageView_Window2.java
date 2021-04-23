@@ -35,7 +35,7 @@ public class Flink03_Practice_PageView_Window2 {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         //2.读取文本数据
-        DataStreamSource<String> readTextFile = env.readTextFile("input/UserBehavior.csv");
+        DataStreamSource<String> readTextFile = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\UserBehavior.csv");
 
         //3.转换为JavaBean,根据行为过滤数据,并提取时间戳生成Watermark
         WatermarkStrategy<UserBehavior> userBehaviorWatermarkStrategy = WatermarkStrategy.<UserBehavior>forMonotonousTimestamps()
