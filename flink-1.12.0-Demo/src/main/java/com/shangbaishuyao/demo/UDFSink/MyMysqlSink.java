@@ -17,7 +17,7 @@ public class MyMysqlSink extends RichSinkFunction<WaterSensor> {
     public void open(Configuration parameters) throws Exception {
         connection = DriverManager.getConnection(
                 "jdbc:mysql://hadoop102:3306/test?useSSL=false",
-                "root", "xww2018");
+                "root", "shangbaishuyao");
         preparedStatement = connection.prepareStatement(
                 "INSERT INTO `sensor-0821` VALUES(?,?,?) ON DUPLICATE KEY UPDATE `ts`=?,`vc`=?");
     }
