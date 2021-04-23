@@ -9,7 +9,7 @@ import org.apache.flink.types.Row;
 /**
  * Author: shangbaishuyao
  * Date: 13:29 2021/4/23
- * Desc:
+ * Desc: 09之前是table API 到此为止是Flink SQL 了.
  */
 public class FlinkSQL09_SQL_Test {
     public static void main(String[] args) throws Exception {
@@ -26,7 +26,11 @@ public class FlinkSQL09_SQL_Test {
         //3.将流转换为动态表
         Table table = tableEnv.fromDataStream(waterSensorDS);
         //4.使用SQL查询未注册的表
-        Table result = tableEnv.sqlQuery("select id,sum(vc) from " + table + " group by id");
+        Table result = tableEnv.sqlQuery(
+                "select id,sum(vc) from "
+                        +
+                        table
+                        + " group by id");
         //5.将表对象转换为流进行打印输出
         tableEnv.toRetractStream(result, Row.class).print();
         //6.执行任务
