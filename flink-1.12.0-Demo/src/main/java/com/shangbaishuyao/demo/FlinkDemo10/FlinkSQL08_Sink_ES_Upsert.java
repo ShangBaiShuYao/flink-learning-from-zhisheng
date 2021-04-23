@@ -12,6 +12,14 @@ import org.apache.flink.table.descriptors.Schema;
 
 import static org.apache.flink.table.api.Expressions.$;
 /**
+ * 表到流的转换:
+ * Append-only 流（追加流）
+ * Retract 流（撤回流，使用聚合操作，count，sum等）
+ * Upsert 流(更新流,直接更新)
+ *
+ * 注意: 在将动态表转换为 DataStream 时，只支持 append 流和 retract 流。
+ * 只有当我们对接Hbase,ES等这些外部系统的时候才会有upsert模式.
+ *
  * Author: shangbaishuyao
  * Date: 13:29 2021/4/23
  * Desc:
@@ -40,7 +48,8 @@ public class FlinkSQL08_Sink_ES_Upsert {
                         $("ts").count().as("ct"),
                         $("vc"));
         //6.将selectTable写入ES
-        tableEnv.connect(new Elasticsearch()
+        tableEnv.connect(
+                new Elasticsearch()
                 .index("sensor_sql")
                 .documentType("_doc")
                 .version("6")

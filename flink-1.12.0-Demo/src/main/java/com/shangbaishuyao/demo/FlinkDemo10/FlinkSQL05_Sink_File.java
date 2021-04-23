@@ -11,7 +11,18 @@ import org.apache.flink.table.descriptors.FileSystem;
 import org.apache.flink.table.descriptors.Schema;
 
 import static org.apache.flink.table.api.Expressions.$;
-
+/*
+ * 表到流的转换:
+ * Append-only 流（追加流）
+ * Retract 流（撤回流，使用聚合操作，count，sum等）
+ * Upsert 流(更新流,直接更新)
+ *
+ * 注意: 在将动态表转换为 DataStream 时，只支持 append 流和 retract 流。
+ * 只有当我们对接Hbase,ES等这些外部系统的时候才会有upsert模式.
+ * Author: shangbaishuyao
+ * Date: 23:00 2021/4/23
+ * Desc:
+ */
 public class FlinkSQL05_Sink_File {
     public static void main(String[] args) throws Exception {
         //1.获取流执行环境
