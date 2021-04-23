@@ -12,7 +12,22 @@ import org.apache.flink.util.Collector;
 /**
  * Author: shangbaishuyao
  * Date: 0:23 2021/4/23
- * Desc: 案例
+ * Desc: 从CheckPoint处恢复数据
+ *
+ * 从SavePoint和CK恢复任务
+ * //启动任务
+ * bin/flink -c com.shangbaishuyao.WordCount xxx.jar
+ *
+ * //保存点(只能手动)
+ * bin/flink savepoint -m hadoop102:8081 JobId hdfs://hadoop102:8020/flink/save
+ *
+ * //关闭任务并从保存点恢复任务
+ * bin/flink -s hdfs://hadoop102:8020/flink/save/... -m hadoop102:8081 -c com.shangbaishuyao.WordCount xxx.jar
+ *
+ * //从CK位置恢复数据
+ * env.getCheckpointConfig().enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+ *
+ * bin/flink run -s hdfs://hadoop102:8020/flink/ck/Jobid/chk-960 -m hadoop102:8081 -c com.shangbaishuyao.WordCount xxx.jar
  */
 public class Flink09_State_WordCount {
     public static void main(String[] args) throws Exception {
@@ -23,7 +38,7 @@ public class Flink09_State_WordCount {
         //开启CK
         env.enableCheckpointing(5000);
         env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
-        //Cancel任务时不删除CK
+        //Cancel任务时不删除CK , 从CK位置恢复数据
         env.getCheckpointConfig().enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
         //2.读取端口数据并转换为元组
         SingleOutputStreamOperator<Tuple2<String, Integer>> wordToOneDS = env.socketTextStream("hadoop102", 9999)
