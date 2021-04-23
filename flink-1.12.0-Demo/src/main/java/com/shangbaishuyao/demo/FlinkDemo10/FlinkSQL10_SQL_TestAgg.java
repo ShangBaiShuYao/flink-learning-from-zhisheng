@@ -26,7 +26,7 @@ public class FlinkSQL10_SQL_TestAgg {
         //3.将流进行表注册
         tableEnv.createTemporaryView("sensor",waterSensorDS);
         //4.使用SQL查询注册的表
-        Table result = tableEnv.sqlQuery("select id,count(ts) ct,sum(vc) vc_sum from sensor group by id");
+        Table result = tableEnv.sqlQuery("select id,count(ts) ct,sum(vc) vc_sum from sensor group by id");//用了group by 分组了,下面就不能使用追加流了
         //5.将表对象转换为流进行打印输出
         tableEnv.toRetractStream(result, Row.class).print();
         //6.执行任务
