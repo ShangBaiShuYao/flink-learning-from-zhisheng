@@ -33,8 +33,8 @@ public class sendSMS {
 
         DefaultProfile profile = DefaultProfile.getProfile(
                 "default",
-                "LTAI4FwU2Fd4xz1mbaQJBUgB",
-                "xPneF1UWkvN6Q9qlpveaV9zbw2FJzN");
+                "*************",
+                "***********");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -67,7 +67,7 @@ public class sendSMS {
     }
 
     public static void send2(String PhoneNumbers, Map<String,Object> param) {
-        DefaultProfile profile = DefaultProfile.getProfile("default", "LTAI4FwU2Fd4xz1mbaQJBUgB", "xPneF1UWkvN6Q9qlpveaV9zbw2FJzN");
+        DefaultProfile profile = DefaultProfile.getProfile("default", "*********", "***********");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();

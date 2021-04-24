@@ -11,11 +11,11 @@ public class SendMail {
     //上白书妖
 //    private String from = "shangbaishuyao@163.com";// 发件人的邮箱地址
 //    private String user = "shangbaishuyao@163.com";// 发件人称号，同邮箱地址
-//    private String password = "UASWYIBADCNGKKTU";// 发件人邮箱客户端的授权码
+//    private String password = "**********";// 发件人邮箱客户端的授权码
     //LA791项目
     private String from = "pafzppmm@163.com";// 发件人的邮箱地址
     private String user = "pafzppmm@163.com";// 发件人称号，同邮箱地址
-    private String password = "BYTFFCUWHZVZEJIP";// 发件人邮箱客户端的授权码
+    private String password = "***********";// 发件人邮箱客户端的授权码
 
     /* 发送验证信息的邮件 */
     public boolean sendMail(String to, String text, String title)  throws Exception{
