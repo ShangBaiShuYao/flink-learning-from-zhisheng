@@ -50,6 +50,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="RTDW-gmall-logger" options="-parameters" />
       <module name="RTDW-gmall-publisher" options="-parameters" />
+      <module name="UserBehaviorAnalysis" options="-bootclasspath &quot;C:\Program Files\Java\jdk1.8.0_202/jre/lib/rt.jar&quot;" />
       <module name="orderreceiving" options="-parameters" />
     </option>
   </component>

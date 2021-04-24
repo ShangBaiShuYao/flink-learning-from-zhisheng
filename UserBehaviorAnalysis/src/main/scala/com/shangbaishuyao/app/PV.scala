@@ -16,7 +16,20 @@ import org.apache.flink.streaming.api.windowing.time.Time
  * 但是PV并不直接决定页面的真实来访者数量，
  * 如同一个来访者通过不断的刷新页面，也可以制造出非常高的PV。
  *
- * create by shangbaishuyao on 2021/3/21
+ * 上白书妖补充:
+ * 你想建设一个能承受500万PV/每天的网站吗？ 500万PV是什么概念？服务器每秒要处理多少个请求才能应对？如果计算呢？
+ * PV是什么：
+ * PV是page view的简写。PV是指页面的访问次数，每打开或刷新一次页面，就算做一个pv。
+ *
+ * 假设:
+ * 分析⼀个计算各 app PV 的案例，
+ * 如下图所示，圆球表示 app1 的⽇志，⽅块表示 app2 的⽇志，Source 端
+ * 从外部系统读取⽤户上报的各 app ⾏为⽇志，要计算各 app 的 PV，所以按照 app 进⾏ keyBy，
+ * 相同 app 的数据发送到同⼀个 Operator 实例中处理，keyBy 后对 app 的 PV 值进⾏累加来，
+ * 最后将计算的 PV 结果 输出到外部 Sink 端。
+ *
+ * 会造成数据倾斜问题.
+ *
  * @Author: 上白书妖
  * @Date: 12:52 2021/3/21
  */

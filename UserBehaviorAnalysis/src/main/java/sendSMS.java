@@ -7,6 +7,8 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.google.gson.Gson;
+import com.wxapi.WxApiCall.WxApiCall;
+import com.wxapi.model.RequestModel;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -86,7 +88,22 @@ public class sendSMS {
             e.printStackTrace();
         }
     }
+
+    public static void send3(){
+        RequestModel model = new RequestModel();
+        model.setGwUrl("https://way.jd.com/chuangxin/VerCodesms");
+        model.setAppkey("a72fa03d324f2a19160f5bdc6b1071ff");
+        Map queryMap = new HashMap();
+        queryMap.put("mobile","19956571280"); //访问参数
+        queryMap.put("content","【创信】你的验证码是：5873，3分钟内有效！"); //访问参数
+        model.setQueryParams(queryMap);
+        WxApiCall call = new WxApiCall();
+        call.setModel(model);
+        call.request();
+    }
+
     public static void main(String[] args) throws Exception{
-        send2("19956571280",null);
+//        send2("19956571280",null);
+          send3();
     }
 }

@@ -3,7 +3,8 @@ package com.shangbaishuyao.app
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import java.util
 import java.util.Properties
-import com.shangbaishuyao.Handler.writeHDFS
+
+import com.shangbaishuyao.Handler.{SendMail, sendSMS, writeHDFS}
 import com.shangbaishuyao.utils.{GA791_ProducerKafka, MyKafkaUtil}
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -62,7 +63,8 @@ object GA791 {
             }
 
             Thread.sleep(1000)
-            //               sendSMS.send2("19956571280",null)
+//            sendSMS.send2("19956571280",null)
+            SendMail.SendMail2()
           }
           if (arr.contains("ERROR")) {
             val file = new File("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\hdfs.txt")
@@ -75,6 +77,7 @@ object GA791 {
             }
 
             //               sendSMS.send2("19956571280",null)
+            SendMail.SendMail2()
 //            arr.toList.foreach(x => list.add(x))
           }
         }
