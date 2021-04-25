@@ -63,7 +63,7 @@ object GA791 {
             }
 
             Thread.sleep(1000)
-//            sendSMS.send2("19956571280",null)
+//            SendSMS.send2("19956571280",null)
             SendMail.SendMail2()
           }
           if (arr.contains("ERROR")) {
@@ -76,7 +76,7 @@ object GA791 {
               writer_name.write(elem)
             }
 
-            //               sendSMS.send2("19956571280",null)
+            //               SendSMS.send2("19956571280",null)
             SendMail.SendMail2()
 //            arr.toList.foreach(x => list.add(x))
           }

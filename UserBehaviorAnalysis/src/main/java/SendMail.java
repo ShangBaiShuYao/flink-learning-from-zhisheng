@@ -4,7 +4,11 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
-
+/*
+ * Author: shangbaishuyao
+ * Date: 0:51 2021/4/25
+ * Desc: 发送163有向案例
+ */
 public class SendMail {
     //上白书妖
 //    private String from = "shangbaishuyao@163.com";// 发件人的邮箱地址

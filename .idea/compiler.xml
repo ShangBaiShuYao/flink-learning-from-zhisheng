@@ -14,13 +14,13 @@
         <module name="flink-learning-connectors-es7" />
         <module name="flink-clickhouse-sink" />
         <module name="flink-learning-from-zhisheng-sinks" />
+        <module name="RTDW-gmall-publisher" />
         <module name="flink-1.12.0-Demo" />
         <module name="flink-learning-from-zhisheng-core" />
         <module name="flink-from-shangbaishuyao-wordCount" />
         <module name="flink-learning-connectors-mysql" />
         <module name="flink-learning-sql-ago" />
         <module name="flink-learning-configration-center-apollo" />
-        <module name="UserBehaviorAnalysis" />
         <module name="flink-learning-connectors-activemq" />
         <module name="flink-learning-connectors-kafka" />
         <module name="flink-learning-connectors-rabbitmq" />
@@ -30,7 +30,7 @@
         <module name="flink-learning-connectors-rocketmq" />
         <module name="Flink-shangbaishuyao-RTDW-gmall-realtime" />
         <module name="flink-learning-connectors-cassandra" />
-        <module name="RTDW-gmall-publisher" />
+        <module name="UserBehaviorAnalysis" />
         <module name="shangbaishuyao" />
         <module name="flink-learning-connectors-redis" />
         <module name="flink-learning-connectors-flume" />
@@ -41,8 +41,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="flink-1.12.0-Demo" target="1.8" />
-      <module name="flink-clickhouse-sink" target="1.8" />
       <module name="gmall0820-realtime" target="1.8" />
     </bytecodeTargetLevel>
   </component>

@@ -10,18 +10,15 @@ import com.google.gson.Gson;
 import com.wxapi.WxApiCall.WxApiCall;
 import com.wxapi.model.RequestModel;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 /**
  * Desc:
- * LTAI4FwU2Fd4xz1mbaQJBUgB
- * xPneF1UWkvN6Q9qlpveaV9zbw2FJzN
  * create by shangbaishuyao on 2021/3/31
  * @Author: 上白书妖
  * @Date: 16:12 2021/3/31
  */
-public class sendSMS {
+public class SendSMS {
     /**
      * 发送短信
      * @param PhoneNumbers
