@@ -21,7 +21,7 @@ import java.time.Duration;
 
 /**
  * Desc: 支付宽表处理程序 <br/>
- *
+ * TODO 使用IntervalJoin关联两条流
  * create by shangbaishuyao on 2021/4/9
  * @Author: 上白书妖
  * @Date: 15:49 2021/4/9

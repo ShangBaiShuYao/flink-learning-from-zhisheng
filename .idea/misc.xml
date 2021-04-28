@@ -20,6 +20,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/Leetcode/pom.xml" />
         <option value="$PROJECT_DIR$/RTDW/pom.xml" />
       </set>
     </option>

@@ -7,7 +7,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="flink-learning-from-zhisheng" />
         <module name="flink-learning-connectors-hdfs" />
         <module name="flink-learning-connectors-es6" />
         <module name="flink-learning-from-zhisheng-source" />
@@ -42,13 +41,14 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="gmall0820-realtime" target="1.8" />
+      <module name="Leetcode" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="RTDW-gmall-logger" options="-parameters" />
       <module name="RTDW-gmall-publisher" options="-parameters" />
-      <module name="UserBehaviorAnalysis" options="-bootclasspath &quot;C:\Program Files\Java\jdk1.8.0_202/jre/lib/rt.jar&quot;" />
+      <module name="UserBehaviorAnalysis" options="" />
       <module name="orderreceiving" options="-parameters" />
     </option>
   </component>

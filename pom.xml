@@ -6,6 +6,7 @@
 
     <groupId>com.shangbaishuyao.flink</groupId>
     <artifactId>flink-learning-from-zhisheng</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <modules>
@@ -19,6 +20,7 @@
         <module>flink-from-shangbaishuyao-wordCount</module>
         <module>UserBehaviorAnalysis</module>
         <module>Flink-shangbaishuyao-RTDW-gmall-realtime</module>
+        <module>leetcode</module>
     </modules>
 
     <properties>
