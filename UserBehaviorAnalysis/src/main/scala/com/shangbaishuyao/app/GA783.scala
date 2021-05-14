@@ -141,6 +141,5 @@ object GA783 {
       updateStmt.close()
       conn.close()
     }
-
   }
 }
