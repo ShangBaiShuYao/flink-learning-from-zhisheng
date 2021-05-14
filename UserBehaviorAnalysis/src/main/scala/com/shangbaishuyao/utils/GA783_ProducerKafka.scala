@@ -12,7 +12,7 @@ import scala.io.BufferedSource
  *
  * @Author: 上白书妖
  * @Date: 17:32 2021/3/20
- */
+ */ 
 object GA783_ProducerKafka {
   val bootstraps:String="hadoop102:9092,hadoop103:9092,hadoop104:9092"
   val userBehaviorTopic:String="t_ub" // kafka中存放用户行为数据的主题
