@@ -21,6 +21,7 @@
         <module>UserBehaviorAnalysis</module>
         <module>Flink-shangbaishuyao-RTDW-gmall-realtime</module>
         <module>leetcode</module>
+        <module>flink-cdc</module>
     </modules>
 
     <properties>
