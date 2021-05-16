@@ -17,6 +17,8 @@ import java.util.Properties;
  * Desc: DataStream方式的应用Flink CDC
  *
  * 前提: mysql对这个库的这张表开启binlog.
+ *
+ * 注意: 测试checkPoint恢复任务只能打包到集群上测试, 这个local模式是不支持从checkPoint上去恢复任务的.
  */
 public class FlinkCDC {
     public static void main(String[] args) throws Exception {
