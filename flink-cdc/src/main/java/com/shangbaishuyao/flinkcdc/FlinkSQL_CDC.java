@@ -32,6 +32,7 @@ public class FlinkSQL_CDC {
                 "  'table-name' = 'z_user_info'" +
                 ")");
 
+        //插叙表数据
         tableEnv.executeSql("select * from user_info").print();
         env.execute();
     }
