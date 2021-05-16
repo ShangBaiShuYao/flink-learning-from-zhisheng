@@ -14,7 +14,7 @@ import java.util.Properties;
 /**
  * Author: shangbaishuyao
  * Date: 11:14 2021/5/16
- * Desc: DataStream方式的应用FlinkCDC
+ * Desc: DataStream方式的应用Flink CDC
  *
  * 前提: mysql对这个库的这张表开启binlog.
  */
