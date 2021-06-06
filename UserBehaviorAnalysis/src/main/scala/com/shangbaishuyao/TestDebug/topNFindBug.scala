@@ -3,7 +3,7 @@ package com.shangbaishuyao.TestDebug
 import java.util.{Date, Properties}
 
 import com.shangbaishuyao.bean.UserBehavior
-import com.shangbaishuyao.utils.MyKafkaUtil
+import com.shangbaishuyao.utils.{MyKafkaUtil, MyKafkaUtil2}
 import org.apache.flink.api.common.functions.AggregateFunction
 import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.streaming.api.TimeCharacteristic

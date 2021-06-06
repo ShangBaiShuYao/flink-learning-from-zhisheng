@@ -1,15 +1,19 @@
 package com.shangbaishuyao.app
 
-import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
-import java.util
+import java.time.ZoneId
 import java.util.Properties
 
-import com.shangbaishuyao.Handler.{SendMail, sendSMS, writeHDFS}
-import com.shangbaishuyao.utils.{GA791_ProducerKafka, MyKafkaUtil}
+import com.shangbaishuyao.Handler.{Copy, LiuLiangUserDetailBucketAssigner, SendMail}
+import com.shangbaishuyao.utils.{GA791_ProducerKafka, MyKafkaUtil2, PropertiesUtil}
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
-import org.apache.flink.api.common.serialization.SimpleStringSchema
+import org.apache.flink.api.common.serialization.{SimpleStringEncoder, SimpleStringSchema}
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
+import org.apache.flink.streaming.connectors.fs.{SequenceFileWriter, StringWriter}
+import org.apache.flink.streaming.connectors.fs.bucketing.{BucketingSink, DateTimeBucketer}
+import org.apache.flink.api.scala._
+import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink
+import org.apache.hadoop.io.{IntWritable, Text}
 
 /**
  * Desc: GA791 <br/>
@@ -38,53 +42,45 @@ object GA791 {
       GA791_ProducerKafka.GA791,
       new SimpleStringSchema(), props)
 
-    val list = new util.ArrayList[String]()
+    val config: Properties = PropertiesUtil.load("config.properties")
+    val errorRank: String = config.getProperty("error")
 
     //读取数据 , 并且设置时间语义和waterMark(水位线)
     //    env.readTextFile(getClass.getResource("").getPath)
     //83.149.9.216 - - 17/05/2015:10:05:03 +0000 GET /presentations/logstash-monitorama-2013/images/kibana-search.png
     //83.149.9.216 - - 17/05/2015:10:05:43 +0000 GET /presentations/logstash-monitorama-2013/images/kibana-dashboard3.png
     //添加数据源  测试的时候需要加上setStartFromEarliest()
-    env.addSource(kafkaProps.setStartFromEarliest())
-      //    env.readTextFile("H:\\大数据电商数仓\\Bigdata_warehouse_Hadoop104\\vmware.log")
-      .map(
-        line => {
-          val arr: Array[String] = line.split(" ")
-          if (arr.contains("error")) {
-            //            println(arr.toList)
-            println(arr.toList.toString())
-            val file = new File("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\hdfs.txt")
-            val writer_name = new BufferedWriter(new FileWriter(file))
-//            val writer = new PrintWriter(new File("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\hdfs.txt"))
-            val list1: List[String] = arr.toList
-            for (elem <- list1) {
-//              println(elem)
-              writer_name.write(elem)
-            }
-
-            Thread.sleep(1000)
-//            SendSMS.send2("19956571280",null)
-            SendMail.SendMail2()
-          }
-          if (arr.contains("ERROR")) {
-            val file = new File("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\hdfs.txt")
-            val writer_name = new BufferedWriter(new FileWriter(file))
-            println(arr.toList.toString())
-            val list1: List[String] = arr.toList
-            for (elem <- list1) {
-//              println(elem)
-              writer_name.write(elem)
-            }
-
-            //               SendSMS.send2("19956571280",null)
-            SendMail.SendMail2()
-//            arr.toList.foreach(x => list.add(x))
-          }
+//    val value: DataStream[String] = env.addSource(kafkaProps.setStartFromEarliest())
+    val value: DataStream[String] = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\vmware.log")
+//    value.writeAsText("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\hdfs.txt")
+    val value1: DataStream[String] = value.map(
+      line => {
+        var a = "";
+        //判断是否包含指定字符
+        if (line.contains(errorRank)) {
+          println(line)
+//          SendMail.SendMail2("系统告警错误内容:" + line, "系统告警通知")
+          a = line
+//          hdfsSinkDemo.sinkHDFS3(line)
         }
-      )
-    writeHDFS.testCopyFromLocalFile
-    //执行
-    env.execute()
+        a
+      }
+    )
+    println("======================"+value1+"=====================")
+    //必须要设置,检查点10秒钟
+    env.enableCheckpointing(10000);
+    val sink: StreamingFileSink[String] = hdfsSinkDemo.sinkHDFS()
+//    val sink: BucketingSink[String] = hdfsSinkDemo.sinkHDFS2()
+//    val sink = new BucketingSink[String]("D:\\idea_out\\rollfilesink")
+//    sink.setBucketer(new DateTimeBucketer("yyyy-MM-dd--HHmm", ZoneId.of("America/Los_Angeles")))
+//    sink.setWriter(new StringWriter[String])
+//    sink.setBatchSize(1024 * 1024 * 400) // this is 400 MB
+
+//    value1.addSink(MyKafkaUtil2.getKafkaSink("t_ub"))
+    value1.addSink(sink)
+    Copy.putTxt()
+//    Copy.test("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\UserBehaviorAnalysis\\Data\\out\\2021-05-22--19\\.part-0-0.inprogress.00449570-b345-492f-9c08-835901cf9d2f","/data/")
+    env.execute("test")
   }
 }
 

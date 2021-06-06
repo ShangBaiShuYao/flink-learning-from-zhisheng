@@ -6,7 +6,7 @@ import java.util.{Date, Properties}
 
 import com.shangbaishuyao.Handler.{CountAggregate, HotItemAllWindowFunction, HotItemWindowFunction}
 import com.shangbaishuyao.bean.{GA783_Bean, UserBehavior}
-import com.shangbaishuyao.utils.{GA783_ProducerKafka, MyKafkaUtil}
+import com.shangbaishuyao.utils.{GA783_ProducerKafka, MyKafkaUtil2}
 import org.apache.flink.api.common.functions.AggregateFunction
 import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.configuration.Configuration

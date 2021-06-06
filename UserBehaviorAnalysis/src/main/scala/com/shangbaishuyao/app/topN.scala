@@ -1,9 +1,10 @@
 package com.shangbaishuyao.app
 
 import java.util.Properties
+
 import com.shangbaishuyao.Handler.{CountAggregate, HotItemAllWindowFunction, HotItemWindowFunction}
 import com.shangbaishuyao.bean.UserBehavior
-import com.shangbaishuyao.utils.MyKafkaUtil
+import com.shangbaishuyao.utils.{MyKafkaUtil, MyKafkaUtil2}
 import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment

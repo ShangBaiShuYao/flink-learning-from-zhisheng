@@ -52,7 +52,7 @@ public class SendMail {
         return true;
     }
 
-    public static void SendMail2(){
+    public static void SendMail2(String text , String title){
         SendMail sm = new SendMail();
         try {
             sm.sendMail("pafzppmm@163.com", "你好，这是一封测试邮件，无需回复。", "测试邮件");
