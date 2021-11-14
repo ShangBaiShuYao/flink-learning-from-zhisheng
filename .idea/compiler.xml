@@ -24,6 +24,7 @@
         <module name="flink-cdc" />
         <module name="flink-learning-connectors-activemq" />
         <module name="flink-learning-connectors-kafka" />
+        <module name="flume" />
         <module name="flink-learning-connectors-rabbitmq" />
         <module name="RTDW-gmall-realtime" />
         <module name="flink-learning-from-zhisheng-common" />

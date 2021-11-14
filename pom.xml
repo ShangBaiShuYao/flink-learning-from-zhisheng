@@ -21,6 +21,7 @@
         <module>UserBehaviorAnalysis</module>
         <module>Flink-shangbaishuyao-RTDW-gmall-realtime</module>
         <module>flink-cdc</module>
+        <module>flume</module>
     </modules>
 
     <properties>

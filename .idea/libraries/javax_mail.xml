@@ -1,8 +1,6 @@
 <component name="libraryTable">
   <library name="javax.mail">
-    <CLASSES>
-      <root url="jar://G:/MavenRepository/shangbaishuyao/SendMail/javax.mail.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC />
     <SOURCES />
   </library>
