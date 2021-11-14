@@ -7,6 +7,8 @@
     <file url="file://$PROJECT_DIR$/RTDW-gmall-publisher/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/UserBehaviorAnalysis/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/UserBehaviorAnalysis/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dataworks_UDTF/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dataworks_UDTF/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-cdc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-clickhouse-sink/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-common/src/main/java" charset="UTF-8" />

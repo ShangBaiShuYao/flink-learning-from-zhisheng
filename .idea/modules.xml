@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/flink-1.12.0-TheSourceCode/flink-end-to-end-tests/flink-plugins-test/another-dummy-fs/another-dummy-fs.iml" filepath="$PROJECT_DIR$/flink-1.12.0-TheSourceCode/flink-end-to-end-tests/flink-plugins-test/another-dummy-fs/another-dummy-fs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dataworks_UDTF/dataworks_UDTF.iml" filepath="$PROJECT_DIR$/dataworks_UDTF/dataworks_UDTF.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-1.12.0-TheSourceCode/flink-end-to-end-tests/flink-plugins-test/dummy-fs/dummy-fs.iml" filepath="$PROJECT_DIR$/flink-1.12.0-TheSourceCode/flink-end-to-end-tests/flink-plugins-test/dummy-fs/dummy-fs.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-1.12.0-TheSourceCode/flink-annotations/flink-annotations.iml" filepath="$PROJECT_DIR$/flink-1.12.0-TheSourceCode/flink-annotations/flink-annotations.iml" />
       <module fileurl="file://$PROJECT_DIR$/flink-1.12.0-TheSourceCode/flink-formats/flink-avro/flink-avro.iml" filepath="$PROJECT_DIR$/flink-1.12.0-TheSourceCode/flink-formats/flink-avro/flink-avro.iml" />
