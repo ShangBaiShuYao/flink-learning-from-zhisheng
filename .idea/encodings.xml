@@ -8,21 +8,15 @@
     <file url="file://$PROJECT_DIR$/UserBehaviorAnalysis/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/UserBehaviorAnalysis/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-cdc/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-cdc/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-clickhouse-sink/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-from-shangbaishuyao-wordCount/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-from-shangbaishuyao-wordCount/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-configration-center/flink-learning-configration-center-apollo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-configration-center/flink-learning-configration-center-apollo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-configration-center/flink-learning-configration-center-nacos/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-configration-center/flink-learning-configration-center-nacos/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-activemq/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-activemq/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-akka/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-cassandra/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-cassandra/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-es/flink-learning-connectors-es6/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-es/flink-learning-connectors-es6/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-es/flink-learning-connectors-es7/src/main/java" charset="UTF-8" />
@@ -32,7 +26,6 @@
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-hdfs/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-hdfs/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-kafka/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-kafka/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-mysql/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-mysql/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-rabbitmq/src/main/java" charset="UTF-8" />
@@ -42,15 +35,11 @@
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-rocketmq/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-connectors/flink-learning-connectors-rocketmq/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-core/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sinks/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sinks/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-source/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-source/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sql/flink-learning-sql-ago/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sql/flink-learning-sql-ago/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sql/flink-learning-sql-common/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/flink-learning-from-zhisheng-sql/flink-learning-sql-common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/orderreceiving/src/main/java" charset="UTF-8" />
   </component>
 </project>
