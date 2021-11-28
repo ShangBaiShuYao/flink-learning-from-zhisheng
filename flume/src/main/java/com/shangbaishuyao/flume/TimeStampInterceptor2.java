@@ -1,11 +1,12 @@
 package com.shangbaishuyao.flume;
 
+
 import com.alibaba.fastjson.JSONObject;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.interceptor.Interceptor;
+
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +19,11 @@ import java.util.Map;
  * @create 2021-11-14 下午3:21
  */
 
-public class TimeStampInterceptor implements Interceptor {
-
-    private ArrayList<Event> events = new ArrayList<>();
-
+public class TimeStampInterceptor2 implements Interceptor {
     @Override
-    public void initialize() {}
+    public void initialize() {
+
+    }
 
     @Override
     public Event intercept(Event event) {
@@ -33,17 +33,21 @@ public class TimeStampInterceptor implements Interceptor {
 
         JSONObject jsonObject = JSONObject.parseObject(log);
 
-        String ts = jsonObject.getString("ts");
-        headers.put("timestamp", ts);
+        Long ts = jsonObject.getLong("ts");
+
+        //Maxwell输出的数据中的ts字段时间戳单位为秒，Flume HDFSSink要求单位为毫秒
+        String timeMills = String.valueOf(ts * 1000);
+
+        headers.put("timestamp", timeMills);
 
         return event;
+
     }
 
     @Override
-    public List<Event> intercept(List<Event> list) {
-        events.clear();
-        for (Event event : list) {
-            events.add(intercept(event));
+    public List<Event> intercept(List<Event> events) {
+        for (Event event : events) {
+            intercept(event);
         }
         return events;
     }
@@ -54,11 +58,9 @@ public class TimeStampInterceptor implements Interceptor {
     public static class Builder implements Interceptor.Builder {
         @Override
         public Interceptor build() {
-            return new TimeStampInterceptor();
+            return new TimeStampInterceptor2();
         }
-
         @Override
-        public void configure(Context context) {
-        }
+        public void configure(Context context) {}
     }
 }
