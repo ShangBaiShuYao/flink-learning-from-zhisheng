@@ -13,5 +13,11 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://192.168.6.102:3306</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="TianWen102" uuid="f8a37b4f-a1ff-4fa8-a4a7-22b7364fd1e7">
+      <driver-ref>hive</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.apache.hive.jdbc.HiveDriver</jdbc-driver>
+      <jdbc-url>jdbc:hive2://hadoop102:10000</jdbc-url>
+    </data-source>
   </component>
 </project>
