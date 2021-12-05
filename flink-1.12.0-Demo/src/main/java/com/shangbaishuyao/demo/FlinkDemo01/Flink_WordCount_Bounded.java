@@ -8,12 +8,11 @@ import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
-/**
- * Author: shangbaishuyao
- * Date: 12:48 2021/4/22
- * Desc: Flink 有界流处理
- *
- */
+/*
+ * @author: 徐霸天
+ * @des:
+ * @date: 上午10:56 2021/12/5
+ **/
 public class Flink_WordCount_Bounded {
     public static void main(String[] args) throws Exception{
         //1.获取执行环境
