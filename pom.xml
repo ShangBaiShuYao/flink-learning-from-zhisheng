@@ -22,6 +22,9 @@
         <module>Flink-shangbaishuyao-RTDW-gmall-realtime</module>
         <module>flink-cdc</module>
         <module>flume</module>
+        <module>flink-1.12.0-Demo</module>
+        <module>flink-1.14.3-Demo</module>
+        <module>flink-release-1.14.3</module>
     </modules>
 
     <properties>

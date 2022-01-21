@@ -18,6 +18,9 @@
         <option value="$PROJECT_DIR$/flink-200821-master/pom.xml" />
         <option value="$PROJECT_DIR$/flink-1.12.0-Demo/pom.xml" />
         <option value="$PROJECT_DIR$/dataworks_UDTF/pom.xml" />
+        <option value="$PROJECT_DIR$/../../../flink-learning-from-zhisheng/flink-release-1.14.3/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-release-1.14.3/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-1.14.3-Demo/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
