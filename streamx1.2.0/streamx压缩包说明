@@ -1,0 +1,2 @@
+此压缩包是streamx 1.2.0稳定版本的源码编译好的压缩包. 可以直接使用. 如果公司使用的hadoop,flink版本不是streamx 1.2.0 默认的版本则需要重新压缩.
+压缩方法在我的博客中,地址是: https://www.xubatian.cn/
