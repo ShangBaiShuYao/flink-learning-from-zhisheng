@@ -27,6 +27,7 @@
       <set>
         <option value="$PROJECT_DIR$/Leetcode/pom.xml" />
         <option value="$PROJECT_DIR$/RTDW/pom.xml" />
+        <option value="$PROJECT_DIR$/flink-1.13-Demo/pom.xml" />
       </set>
     </option>
   </component>
