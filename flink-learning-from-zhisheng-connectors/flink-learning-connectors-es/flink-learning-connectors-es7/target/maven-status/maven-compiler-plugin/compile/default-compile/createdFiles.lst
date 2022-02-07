@@ -1,0 +1,3 @@
+com/shangbaishuyao/connectors/es7/Sink2ES7Main.class
+com/shangbaishuyao/connectors/es7/utils/RetryRequestFailureHandler.class
+com/shangbaishuyao/connectors/es7/utils/ESSinkUtil.class

@@ -1,0 +1,4 @@
+com/shangbaishuyao/connectors/rabbitmq/Main1.class
+com/shangbaishuyao/connectors/rabbitmq/utils/RabbitMQProducerUtil.class
+com/shangbaishuyao/connectors/rabbitmq/model/EndPoint.class
+com/shangbaishuyao/connectors/rabbitmq/Main.class

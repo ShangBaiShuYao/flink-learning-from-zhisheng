@@ -1,0 +1,6 @@
+com/shangbaishuyao/sinks/Main2.class
+com/shangbaishuyao/sinks/Main.class
+com/shangbaishuyao/sinks/sinks/MySink.class
+com/shangbaishuyao/sinks/sinks/SinkToMySQL.class
+com/shangbaishuyao/sinks/utils/KafkaUtil.class
+com/shangbaishuyao/sinks/model/Student.class

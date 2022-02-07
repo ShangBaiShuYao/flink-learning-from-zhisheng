@@ -1743,12 +1743,14 @@ public abstract class DataSet<T> {
      *
      * @see #printToErr()
      * @see #printOnTaskManager(String)
+     * @return
      */
-    public void print() throws Exception {
+    public MapOperator<String, Tuple2<String, Integer>> print() throws Exception {
         List<T> elements = collect();
         for (T e : elements) {
             System.out.println(e);
         }
+        return null;
     }
 
     /**

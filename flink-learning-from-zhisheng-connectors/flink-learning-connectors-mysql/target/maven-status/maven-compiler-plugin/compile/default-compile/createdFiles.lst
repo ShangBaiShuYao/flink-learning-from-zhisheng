@@ -1,0 +1,5 @@
+com/shangbaishuyao/connectors/mysql/KafkaUtil/KafkaUtil.class
+com/shangbaishuyao/connectors/mysql/model/Student.class
+com/shangbaishuyao/connectors/mysql/Main$1.class
+com/shangbaishuyao/connectors/mysql/Main.class
+com/shangbaishuyao/connectors/mysql/sinks/SinkToMySQL.class

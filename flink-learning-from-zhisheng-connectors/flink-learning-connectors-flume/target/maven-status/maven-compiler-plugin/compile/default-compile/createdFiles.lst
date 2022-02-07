@@ -1,0 +1,4 @@
+com/shangbaishuyao/connectors/flume/FlumeSink.class
+com/shangbaishuyao/connectors/flume/utils/FlumeUtil.class
+com/shangbaishuyao/connectors/flume/Main.class
+com/shangbaishuyao/connectors/flume/FlumeEventBuilder.class
