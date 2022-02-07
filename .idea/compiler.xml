@@ -225,12 +225,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="flink-1.13-Demo" target="1.8" />
-      <module name="flink-1.14.3-TheSourceCode" target="1.8" />
       <module name="gmall0820-realtime" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-encoding UTF-8" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="RTDW-gmall-logger" options="-parameters" />
       <module name="RTDW-gmall-publisher" options="-parameters" />

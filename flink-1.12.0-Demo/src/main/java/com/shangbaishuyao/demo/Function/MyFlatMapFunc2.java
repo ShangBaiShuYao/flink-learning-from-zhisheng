@@ -17,7 +17,9 @@ public class MyFlatMapFunc2 implements FlatMapFunction<String, Tuple2<String, In
         //遍历写出
         for (String word : words) {
             //将单词转换为元组
-            out.collect(new Tuple2<String, Integer>(word, 1));
+//            out.collect(new Tuple2<String, Integer>(word, 1));
+            //将单词转换为元组
+            out.collect(Tuple2.of(word,1));
         }
     }
 }
