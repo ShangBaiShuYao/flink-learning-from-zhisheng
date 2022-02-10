@@ -9,12 +9,12 @@ import org.apache.flink.util.Collector;
 
 /*
  * @author: shangbaishuyao
- * @des:
+ * @des: 批处理案例 <br/>
  * @date: 下午3:29 2022/1/31
  **/
 public class Flink_WordCount_Batch {
     public static void main(String[] args) throws Exception{
-        //创建执行环境
+        //创建 批处理 执行环境
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         //读取数据
         DataSource<String> lineDataStream = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.14.3-Demo/input/word.txt");
