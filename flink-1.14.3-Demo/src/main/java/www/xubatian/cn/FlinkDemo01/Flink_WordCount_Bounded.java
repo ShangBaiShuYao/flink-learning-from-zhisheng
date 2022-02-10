@@ -21,6 +21,7 @@ public class Flink_WordCount_Bounded {
     public static void main(String[] args) throws Exception{
         //1.获取执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //设置并行并行度. 设置为1就是单线程执行
         env.setParallelism(1);
         //2.读取文件创建流
         DataStreamSource<String> input = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.14.3-Demo/input/word.txt");
@@ -50,7 +51,7 @@ public class Flink_WordCount_Bounded {
                 return value.f0; //相当于cala中的 ._1
             }
             //6. 聚合         7.打印结果
-        }).sum(1).print();
+        }).sum(1).print();   //sum是一个有状态的算子,默认就带了状态了.
         //8. 启动流式程序
         env.execute("Flink_WordCount_Bounded");
     }
