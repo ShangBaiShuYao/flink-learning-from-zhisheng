@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Author: shangbaishuyao
  * Date: 16:14 2021/4/22
- * Desc:
+ * Desc: 从集合中读取数据
  */
 public class Flink02_Source_Collection {
     public static void main(String[] args) throws Exception {

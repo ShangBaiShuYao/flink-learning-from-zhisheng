@@ -54,6 +54,6 @@ public class Flink01_WordCount_Chain {
         //6.打印结果
         result.print("Result");
         //7.启动任务
-        env.execute();
+        env.execute("");
     }
 }
