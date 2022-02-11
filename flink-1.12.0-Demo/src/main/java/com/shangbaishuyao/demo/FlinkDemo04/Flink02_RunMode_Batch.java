@@ -21,7 +21,7 @@ public class Flink02_RunMode_Batch {
         //TODO 指定为批处理模式
         env.setRuntimeMode(RuntimeExecutionMode.STREAMING);
         //2.读取文本数据
-        DataStreamSource<String> readTextFile = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\word.txt");
+        DataStreamSource<String> readTextFile = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/word.txt");
         //3.压平并转换为元组
         SingleOutputStreamOperator<Tuple2<String, Integer>> wordToOne = readTextFile.flatMap(new FlatMapFunction<String, Tuple2<String, Integer>>() {
             @Override

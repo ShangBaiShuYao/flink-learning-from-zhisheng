@@ -34,7 +34,7 @@ public class Flink05_Practice_PageView {
         //1.获取执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         //2.读取文本数据
-        DataStreamSource<String> readTextFile = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\UserBehavior.csv");
+        DataStreamSource<String> readTextFile = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/UserBehavior.csv");
 //        DataStreamSource<String> readTextFile = env.socketTextStream("hadoop102", 9999);
         //3.转换为JavaBean,根据行为过滤数据,并提取时间戳生成Watermark
         WatermarkStrategy<UserBehavior> userBehaviorWatermarkStrategy = WatermarkStrategy.<UserBehavior>forMonotonousTimestamps()

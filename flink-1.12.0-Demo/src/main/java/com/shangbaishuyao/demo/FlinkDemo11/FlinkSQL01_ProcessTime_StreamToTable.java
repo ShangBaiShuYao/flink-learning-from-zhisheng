@@ -19,7 +19,7 @@ public class FlinkSQL01_ProcessTime_StreamToTable {
         env.setParallelism(1);
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
         //2.读取文本数据创建流并转换为JavaBean对象
-        SingleOutputStreamOperator<WaterSensor> waterSensorDS = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\sensor.txt")
+        SingleOutputStreamOperator<WaterSensor> waterSensorDS = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/sensor.txt")
                 .map(line -> {
                     String[] split = line.split(",");
                     return new WaterSensor(split[0],

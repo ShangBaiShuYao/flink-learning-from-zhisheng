@@ -22,7 +22,7 @@ public class Flink04_Practice_PageView_Process {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         //2.读取文本数据
         DataStreamSource<String> readTextFile = env.readTextFile(
-                "H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\UserBehavior.csv");
+                "/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/UserBehavior.csv");
         //3.转换为JavaBean并过滤出PV的数据
         SingleOutputStreamOperator<UserBehavior> userBehaviorDS = readTextFile.flatMap(new FlatMapFunction<String, UserBehavior>() {
             @Override

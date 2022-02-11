@@ -16,7 +16,7 @@ public class Flink07_Transform_Map {
         env.setParallelism(1);
         //2.从文件读取数据
         DataStreamSource<String> stringDataStreamSource = env.readTextFile(
-                "H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\sensor.txt");
+                "/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/sensor.txt");
         //3.转换为JavaBean并打印数据
 //        stringDataStreamSource
 //                .map(new MyMapFunc())

@@ -15,7 +15,7 @@ public class Flink10_Transform_RichFilter {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(2);
         //2.从文件读取数据
-        DataStreamSource<String> stringDataStreamSource = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\sensor.txt");
+        DataStreamSource<String> stringDataStreamSource = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/sensor.txt");
         //3.过滤数据,只取水位高于30的
         SingleOutputStreamOperator<String> result = stringDataStreamSource.filter(new MyRichFilterFunc());
         //4.打印数据

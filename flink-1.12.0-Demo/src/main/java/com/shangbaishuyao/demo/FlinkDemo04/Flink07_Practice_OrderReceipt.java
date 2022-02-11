@@ -33,8 +33,8 @@ public class Flink07_Practice_OrderReceipt {
         //1.获取执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         //2.读取2个文本数据创建流
-        DataStreamSource<String> orderStreamDS = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\OrderLog.csv");
-        DataStreamSource<String> receiptStreamDS = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\ReceiptLog.csv");
+        DataStreamSource<String> orderStreamDS = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/OrderLog.csv");
+        DataStreamSource<String> receiptStreamDS = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/ReceiptLog.csv");
         //3.转换为JavaBean
         SingleOutputStreamOperator<OrderEvent> orderEventDS = orderStreamDS.flatMap(new FlatMapFunction<String, OrderEvent>() {
             @Override

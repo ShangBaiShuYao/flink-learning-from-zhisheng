@@ -16,7 +16,7 @@ public class Flink09_Transform_RichFlatMap {
         env.setParallelism(2);
         //2.从文件读取数据
         DataStreamSource<String> stringDataStreamSource = env.readTextFile(
-                "H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\sensor.txt");
+                "/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/sensor.txt");
         //3.压平数据
         SingleOutputStreamOperator<String> result = stringDataStreamSource.flatMap(new MyRichFlatMapFunc());
         //4.打印数据

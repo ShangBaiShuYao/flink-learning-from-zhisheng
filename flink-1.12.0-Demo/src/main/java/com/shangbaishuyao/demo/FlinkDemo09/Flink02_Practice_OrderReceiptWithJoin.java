@@ -24,8 +24,8 @@ public class Flink02_Practice_OrderReceiptWithJoin {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
         //2.读取2个文本数据创建流
-        DataStreamSource<String> orderStreamDS = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\OrderLog.csv");
-        DataStreamSource<String> receiptStreamDS = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\ReceiptLog.csv");
+        DataStreamSource<String> orderStreamDS = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/OrderLog.csv");
+        DataStreamSource<String> receiptStreamDS = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/ReceiptLog.csv");
         //3.转换为JavaBean并提取数据中的时间戳生成Watermark
         WatermarkStrategy<OrderEvent> orderEventWatermarkStrategy = WatermarkStrategy.<OrderEvent>forMonotonousTimestamps()
                 .withTimestampAssigner(new SerializableTimestampAssigner<OrderEvent>() {

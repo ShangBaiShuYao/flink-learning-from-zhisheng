@@ -32,7 +32,7 @@ public class Flink05_Practice_LoginApp2 {
                         return element.getEventTime() * 1000L;
                     }
                 });
-        SingleOutputStreamOperator<LoginEvent> loginEventDS = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\LoginLog.csv")
+        SingleOutputStreamOperator<LoginEvent> loginEventDS = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/LoginLog.csv")
                 .map(data -> {
                     String[] split = data.split(",");
                     return new LoginEvent(Long.parseLong(split[0]),

@@ -28,7 +28,7 @@ public class FlinkSQL03_EventTime_StreamToTable {
                         return element.getTs() * 1000L;
                     }
                 });
-        SingleOutputStreamOperator<WaterSensor> waterSensorDS = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\sensor.txt")
+        SingleOutputStreamOperator<WaterSensor> waterSensorDS = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/sensor.txt")
                 .map(line -> {
                     String[] split = line.split(",");
                     return new WaterSensor(split[0],

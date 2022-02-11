@@ -34,7 +34,7 @@ public class Flink06_Practice_OrderPay {
                         return element.getEventTime() * 1000L;
                     }
                 });
-        SingleOutputStreamOperator<OrderEvent> orderEventDS = env.readTextFile("H:\\IDEA_WorkSpace\\flink-learning-from-zhisheng\\flink-1.12.0-Demo\\input\\OrderLog.csv")
+        SingleOutputStreamOperator<OrderEvent> orderEventDS = env.readTextFile("/Users/shangbaishuyao/warehouse/IDEA_WorkSpace/Flink_WorkSpace/flink-learning-from-zhisheng/flink-1.12.0-Demo/input/OrderLog.csv")
 //        SingleOutputStreamOperator<OrderEvent> orderEventDS = env.socketTextStream("hadoop102", 9999)
                 .map(data -> {
                     String[] split = data.split(",");
