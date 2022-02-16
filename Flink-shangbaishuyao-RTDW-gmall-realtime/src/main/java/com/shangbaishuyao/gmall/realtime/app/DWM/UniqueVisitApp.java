@@ -63,7 +63,7 @@ public class UniqueVisitApp {
         //设置CheckPoint检查点超时时间
         //env.getCheckpointConfig().setCheckpointTimeout(60000);
         //设置状态后端类型,保存在HDFS上
-        //env.setStateBackend(new FsStateBackend("hdfs://hadoop202:8020/gmall/checkpoint/uniquevisit"));
+        //env.setStateBackend(new FsStateBackend("hdfs://hadoop202:8020/xubatian/checkpoint/uniquevisit"));
         //设置重启策略为不重启
         //env.setRestartStrategy(RestartStrategies.noRestart());
 

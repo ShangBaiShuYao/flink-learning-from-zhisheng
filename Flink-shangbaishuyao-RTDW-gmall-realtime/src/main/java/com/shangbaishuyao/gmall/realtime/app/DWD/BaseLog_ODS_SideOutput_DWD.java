@@ -50,7 +50,7 @@ public class BaseLog_ODS_SideOutput_DWD {
         //设置检查点的超时时间. 可设置可不设. 超过一分钟废弃.
         env.getCheckpointConfig().setCheckpointTimeout(60000);
         //保存检查点. 即设置状态后端 , 8020:这个是服务端地址. 不是web端地址.
-        env.setStateBackend(new FsStateBackend("hdfs://hadoop102:8020/gmall/checkpoint/baselogApp"));
+        env.setStateBackend(new FsStateBackend("hdfs://hadoop102:8020/xubatian/checkpoint/baselogApp"));
         //设置操作hdfs的访问权限
         System.setProperty("HADOOP_USER_NAME","shangbaishuyao");
 

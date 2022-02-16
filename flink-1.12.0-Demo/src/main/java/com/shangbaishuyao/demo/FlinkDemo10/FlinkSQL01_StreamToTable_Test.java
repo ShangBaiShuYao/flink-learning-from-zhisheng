@@ -56,3 +56,4 @@ public class FlinkSQL01_StreamToTable_Test {
         env.execute();
     }
 }
+

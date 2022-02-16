@@ -21,6 +21,7 @@
         <option value="$PROJECT_DIR$/../../../flink-learning-from-zhisheng/flink-release-1.14.3/pom.xml" />
         <option value="$PROJECT_DIR$/flink-release-1.14.3/pom.xml" />
         <option value="$PROJECT_DIR$/flink-1.14.3-Demo/pom.xml" />
+        <option value="$PROJECT_DIR$/iceberg-demo/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

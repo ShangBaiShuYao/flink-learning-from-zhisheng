@@ -17,12 +17,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="flink-sql-client_2.11" />
         <module name="flink-avro-glue-schema-registry" />
         <module name="flink-datastream-allround-test" />
         <module name="flink-connector-gcp-pubsub_2.11" />
         <module name="flink-learning-connectors-rabbitmq" />
         <module name="flink-scala_2.11" />
+        <module name="flink-container_2.11" />
         <module name="flink-connector-kinesis_2.11" />
         <module name="flink-connector-kafka_2.11" />
         <module name="flink-connector-testing_2.11" />
@@ -39,7 +39,7 @@
         <module name="flink-connector-hive_2.11" />
         <module name="flink-streaming-scala_2.11" />
         <module name="flink-learning-connectors-mysql" />
-        <module name="flink-local-recovery-and-allocation-test" />
+        <module name="flink-elasticsearch5-test" />
         <module name="flink-file-sink-test" />
         <module name="flink-format-common" />
         <module name="flink-csv" />
@@ -60,12 +60,14 @@
         <module name="flink-cep_2.11" />
         <module name="flink-gelly-examples_2.11" />
         <module name="flink-metrics-availability-test" />
+        <module name="icberg-flink-demo" />
         <module name="flink-queryable-state-runtime" />
         <module name="flink-rpc-core" />
         <module name="flink-sql-avro-confluent-registry" />
         <module name="flink-learning-from-zhisheng-common" />
         <module name="flink-metrics-core" />
         <module name="flink-connector-hbase-base_2.11" />
+        <module name="flink-sql-parquet_2.11" />
         <module name="flink-sql-connector-kinesis_2.11" />
         <module name="flink-connector-hbase-2.2_2.11" />
         <module name="flink-connector-twitter_2.11" />
@@ -79,13 +81,13 @@
         <module name="flink-queryable-state-test_2.11" />
         <module name="flink-avro-confluent-registry" />
         <module name="flink-hadoop-fs" />
-        <module name="RTDW-gmall-logger" />
         <module name="flink-clients_2.11" />
         <module name="flink-table-runtime_2.11" />
         <module name="flink-java" />
         <module name="flink-learning-connectors-flume" />
         <module name="flink-connector-wikiedits_2.11" />
         <module name="flink-end-to-end-tests-hbase" />
+        <module name="flink-statebackend-changelog" />
         <module name="flink-table-api-scala_2.11" />
         <module name="flink-parent-child-classloading-test-lib-package_2.11" />
         <module name="flink-stream-stateful-job-upgrade-test" />
@@ -110,7 +112,7 @@
         <module name="flink-table-uber_2.11" />
         <module name="flink-runtime" />
         <module name="flink-rocksdb-state-memory-control-test" />
-        <module name="flink-learning-sql-common" />
+        <module name="flink-connector-cassandra_2.11" />
         <module name="flink-oss-fs-hadoop" />
         <module name="flink-metrics-reporter-prometheus-test" />
         <module name="flink-rpc-akka-loader" />
@@ -127,6 +129,7 @@
         <module name="flink-learning-sql-ago" />
         <module name="flink-examples-table_2.11" />
         <module name="flink-quickstart-java" />
+        <module name="iceberg-spark-demo" />
         <module name="flink-connector-files" />
         <module name="flink-high-parallelism-iterations-test" />
         <module name="flink-dataset-fine-grained-recovery-test" />
@@ -143,7 +146,6 @@
         <module name="flink-s3-fs-hadoop" />
         <module name="flink-fs-hadoop-shaded" />
         <module name="flink-yarn_2.11" />
-        <module name="flink-connector-cassandra_2.11" />
         <module name="flink-dist_2.11" />
         <module name="flink-external-resource-gpu" />
         <module name="flink-metrics-graphite" />
@@ -166,7 +168,7 @@
         <module name="flink-end-to-end-tests-common-kafka" />
         <module name="flink-sql-avro" />
         <module name="flink-test-utils_2.11" />
-        <module name="flink-statebackend-changelog" />
+        <module name="flink-learning-sql-common" />
         <module name="flink-optimizer" />
         <module name="flink-table-api-java-bridge_2.11" />
         <module name="flink-tpch-test" />
@@ -177,7 +179,7 @@
         <module name="flink-queryable-state-client-java" />
         <module name="flink-examples-streaming-gcp-pubsub_2.11" />
         <module name="flink-core" />
-        <module name="flink-container_2.11" />
+        <module name="flink-local-recovery-and-allocation-test" />
         <module name="flink-parent-child-classloading-test-program_2.11" />
         <module name="flink-compress" />
         <module name="flink-file-sink-common" />
@@ -192,7 +194,7 @@
         <module name="flink-learning-connectors-activemq" />
         <module name="flink-python-test_2.11" />
         <module name="flink-table-api-scala-bridge_2.11" />
-        <module name="flink-elasticsearch5-test" />
+        <module name="RTDW-gmall-logger" />
         <module name="flink-distributed-cache-via-blob-test_2.11" />
         <module name="flink-sql-connector-elasticsearch6_2.11" />
         <module name="flink-table-api-java" />
@@ -217,7 +219,7 @@
         <module name="flink-netty-shuffle-memory-control-test" />
         <module name="flink-learning-connectors-redis" />
         <module name="flink-connector-jdbc_2.11" />
-        <module name="flink-sql-parquet_2.11" />
+        <module name="flink-sql-client_2.11" />
         <module name="flink-streaming-java_2.11" />
         <module name="flink-elasticsearch6-test" />
         <module name="flink-tpcds-test" />
@@ -225,6 +227,24 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="flink-clickhouse-sink" target="1.8" />
+      <module name="flink-mesos_2.11" target="11" />
+      <module name="flink-metrics-influxdb_2.11" target="11" />
+      <module name="flink-metrics-jmx_2.11" target="11" />
+      <module name="flink-metrics-prometheus_2.11" target="11" />
+      <module name="flink-ml-api" target="11" />
+      <module name="flink-ml-lib_2.11" target="11" />
+      <module name="flink-ml-parent" target="11" />
+      <module name="flink-ml-uber_2.11" target="11" />
+      <module name="flink-optimizer_2.11" target="11" />
+      <module name="flink-queryable-state-runtime_2.11" target="11" />
+      <module name="flink-runtime_2.11" target="11" />
+      <module name="flink-statebackend-heap-spillable_2.11" target="11" />
+      <module name="flink-swift-fs-hadoop" target="11" />
+      <module name="flink-table-planner-blink_2.11" target="11" />
+      <module name="flink-table-runtime-blink_2.11" target="11" />
+      <module name="flink-table-uber-blink_2.11" target="11" />
+      <module name="force-shading" target="1.6" />
       <module name="gmall0820-realtime" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -452,6 +472,9 @@
       <module name="flink-yarn-tests" options="-Xpkginfo:always" />
       <module name="flink-yarn_2.11" options="-Xpkginfo:always" />
       <module name="flume" options="" />
+      <module name="icberg-flink-demo" options="" />
+      <module name="iceberg-demo" options="" />
+      <module name="iceberg-spark-demo" options="" />
       <module name="java-ci-tools" options="-Xpkginfo:always" />
       <module name="orderreceiving" options="-parameters" />
     </option>

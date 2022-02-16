@@ -13,16 +13,28 @@ import org.apache.flink.util.Collector;
  * Author: shangbaishuyao
  * Date: 15:53 2021/4/22
  * Desc: 任务链 案例
+ *
+ * 关于并行度优先级问题：
+ * 1.代码中算子单独设置
+ * 2.代码中Env全局设置
+ * 3.提交参数
+ * 4.默认配置信息
+ *
+ * 任务链形成条件:
+ * ①并行度要相同
+ * ②中间没有shuffle
+ * ③相同的共享组
  */
 public class Flink01_WordCount_Chain {
     public static void main(String[] args) throws Exception {
         //1.获取执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //全局设置并行度
         env.setParallelism(1);
         //全局禁用任务链
         //env.disableOperatorChaining();
-        //2.读取端口数据创建流
-        DataStreamSource<String> socketTextStream = env.socketTextStream("hadoop102", 9999);
+        //2.读取端口数据创建流  TODO socket不能多并行度消费. 而kafka是可以多并行度消费的. kafka有多个分区.   所以这里你设置多少并行度,他都是1.
+        DataStreamSource<String> socketTextStream = env.socketTextStream("hadoop102", 9999)/*.setParallelism(3)*/;
         //3.将每行数据压平并转换为元组
         SingleOutputStreamOperator<String> wordDS = socketTextStream.flatMap(
                 new FlatMapFunction<String, String>() {
@@ -41,7 +53,7 @@ public class Flink01_WordCount_Chain {
                         return new Tuple2<String, Integer>(value, 1);
                     }
                 });
-        //4.分组
+        //4.分组 TODO keyby不是一个算子,他是决定我们的数据进入到下游的哪一个并行度里面的.他自己没有并行度的.他不会对数据做任何的操作.数据可能从一个并行度来的. 进过keyby之后,可能把他发到好多个并行度里面去了.
         KeyedStream<Tuple2<String, Integer>, String> keyedStream = wordToOneDS.keyBy(
                 new KeySelector<Tuple2<String, Integer>, String>() {
                     @Override
